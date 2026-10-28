@@ -1,0 +1,4 @@
+# Keep CLAUDE.md in sync with AGENTS.md (no symlinks on this checkout), then lint-stage.
+npm run sync:docs
+git add CLAUDE.md
+npx lint-staged

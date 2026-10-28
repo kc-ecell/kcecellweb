@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Build Mode design tokens — see docs/DESIGN_SYSTEM.md
+   Dark is the canonical theme for the public site.
+   ============================================================ */
+
+@theme {
+  /* Ground */
+  --color-void: #06070a;
+  --color-ink-900: #0c0e13;
+  --color-ink-800: #12151c;
+  --color-ink-700: #1a1e28;
+  --color-line: #232837;
+  --color-line-hi: #343b4f;
+
+  /* Text */
+  --color-fg: #eceff6;
+  --color-fg-muted: #9aa2b8;
+  --color-fg-dim: #626a80;
+
+  /* Signal — the E-Cell colour */
+  --color-lime: #c8ff3d;
+  --color-lime-ink: #0b0f00;
+
+  /* Department accents */
+  --color-cyan: #3de8ff;
+  --color-orange: #ff7a2f;
+  --color-pink: #ff4fa8;
+  --color-violet: #8e7bff;
+
+  /* States */
+  --color-ok: #3dff9a;
+  --color-warn: #ffc93d;
+  --color-err: #ff4f5e;
+
+  /* Radii */
+  --radius-0: 0px;
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+
+  /* Fluid type scale */
+  --text-mega: clamp(3.5rem, 11vw, 11rem);
+  --text-display: clamp(2.75rem, 7vw, 6.5rem);
+  --text-h1: clamp(2.25rem, 5vw, 4.25rem);
+  --text-h2: clamp(1.75rem, 3.4vw, 3rem);
+  --text-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --text-lead: clamp(1.125rem, 1.4vw, 1.375rem);
+  --text-label: 0.75rem;
+}
+
+/* Fonts are loaded by next/font in app/layout.tsx and exposed as the raw
+   CSS variables below; map them to Tailwind font-* utilities. */
+@theme inline {
+  --font-display: var(--font-unbounded);
+  --font-body: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-silkscreen);
+  --font-sans: var(--font-geist);
+}
+
+/* Non-namespaced tokens (durations, easings, z-index). Used via arbitrary
+   utilities, e.g. duration-[var(--dur-base)] or z-[var(--z-nav)]. */
+:root {
+  --dur-instant: 80ms;
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 520ms;
+  --dur-epic: 1100ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-snap: cubic-bezier(0.2, 1.4, 0.4, 1);
+  --ease-linear: linear;
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 40;
+  --z-nav: 50;
+  --z-hud: 60;
+  --z-overlay: 80;
+  --z-terminal: 90;
+  --z-toast: 100;
+  --z-boot: 110;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background: var(--color-void);
+    color: var(--color-fg);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Focus ring: 2px lime outline + 2px void offset, on everything. */
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-lime-ink);
+  }
+}
+
+@layer utilities {
+  /* Background grid + noise — pure CSS, shared by every section (0 JS cost). */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.4;
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
+  }
+
+  /* Monospace label: uppercase, tracked, dim. */
+  .label-mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-fg-dim);
+  }
+}
+
+/* The OS reduced-motion setting always wins, even before hydration. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

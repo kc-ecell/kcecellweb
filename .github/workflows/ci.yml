@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Docs in sync (AGENTS.md → CLAUDE.md)
+        run: npm run check:docs
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Prettier
+        run: npm run format:check
+      - name: Build (+ check:devtools)
+        run: npm run build
+
+  # Added in later phases (see docs/DEPLOYMENT.md §4):
+  #   - Phase 2: `supabase start && supabase test db` (RLS pgTAP)
+  #   - Phase 3+: Playwright e2e + Lighthouse CI on the Vercel preview
+  #   - DB type drift: regenerate types and `git diff --exit-code`
