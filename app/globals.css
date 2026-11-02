@@ -387,6 +387,26 @@ h6,
   }
 }
 
+/* This unlayered rule beats Tailwind's layered `hidden`, so hide the desktop nav here. */
+@media (max-width: 767.98px) {
+  .site-header nav {
+    display: none;
+  }
+}
+
+/* Mobile menu: full-screen solid panel under the header */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-nav) - 1);
+  display: flex;
+  flex-direction: column;
+  padding: calc(76px + 24px) var(--gutter) 24px;
+  background: var(--bg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 /* Header over the home hero */
 .site-header.overlay {
   position: fixed;
@@ -825,6 +845,41 @@ h6,
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
   gap: 20px;
   margin-top: 32px;
+}
+
+/* Phones/small tablets: 2 per row (3 from 560px) with compact cards so the team
+   page isn't one person per screen. */
+@media (max-width: 767.98px) {
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .team-grid .team-info {
+    padding: 12px;
+    gap: 4px;
+  }
+  .team-grid .team-info h4 {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+  .team-grid .team-info .role {
+    font-size: 0.75rem;
+  }
+  .team-grid .team-info .bio {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 560px) and (max-width: 1023.98px) {
+  .team-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .team-card {

@@ -199,12 +199,21 @@ export function PageCritters({ count = 10 }: { count?: number }) {
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const newW = parent.clientWidth || window.innerWidth;
-      const newH = Math.max(
-        parent.scrollHeight,
-        parent.clientHeight,
-        window.innerHeight,
-      );
+      // On narrow screens pages get very tall, so critters spread across the whole
+      // page are almost never on screen (and a page-tall canvas can exceed mobile
+      // canvas limits). There, pin the canvas to the viewport instead.
+      const viewportMode = window.innerWidth < 768;
+      canvas.style.position = viewportMode ? "fixed" : "";
+      const newW = viewportMode
+        ? window.innerWidth
+        : parent.clientWidth || window.innerWidth;
+      const newH = viewportMode
+        ? window.innerHeight
+        : Math.max(
+            parent.scrollHeight,
+            parent.clientHeight,
+            window.innerHeight,
+          );
 
       if (newW === 0 || newH === 0) return;
 
