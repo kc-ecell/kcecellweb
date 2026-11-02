@@ -1,41 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Unbounded, Silkscreen } from "next/font/google";
 import "./globals.css";
-import { DevTools } from "@/components/dev/DevTools";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-});
-const unbounded = Unbounded({
-  subsets: ["latin"],
-  variable: "--font-unbounded",
-});
-const silkscreen = Silkscreen({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-silkscreen",
-});
-
 export const metadata: Metadata = {
-  title: "E-Cell KCCEMSR · Build Mode",
+  title: "e-cell · kccemsr, thane.",
   description:
-    "Entrepreneurship Cell, K.C. College of Engineering and Management Studies and Research, Thane. Site rebuild in progress.",
+    "the entrepreneurship cell of k.c. college of engineering, thane. we help students turn ideas into ventures.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  let DevTools: React.ComponentType | null = null;
+  if (process.env.NODE_ENV === "development") {
+    const devMod = await import("@/components/dev/DevTools");
+    DevTools = devMod.DevTools;
+  }
+
   return (
-    <html
-      lang="en"
-      className={`${geist.variable} ${geistMono.variable} ${unbounded.variable} ${silkscreen.variable} h-full antialiased`}
-    >
+    <html lang="en" className="min-h-full antialiased">
       <body className="flex min-h-full flex-col">
         <MotionProvider>{children}</MotionProvider>
-        {process.env.NODE_ENV === "development" && <DevTools />}
+        {DevTools && <DevTools />}
       </body>
     </html>
   );

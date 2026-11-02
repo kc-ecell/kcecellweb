@@ -120,8 +120,8 @@ The Events team should add the rest of the 100+ events through the admin panel, 
 ### Leadership
 | Name | Role | Photo | Fun line |
 |---|---|---|---|
-| Raaj Patkar | President | | Runs the show, calls the meetings nobody asked for, and somehow still finds time to sleep. Probably. |
-| Daivik Pawar | Vice President | | The president when the president is busy. Knows where every document is, including the one you lost. |
+| Raaj Patkar | President | ✓ | Runs the show, calls the meetings nobody asked for, and somehow still finds time to sleep. Probably. |
+| Daivik Pawar | Vice President | ✓ | The president when the president is busy. Knows where every document is, including the one you lost. |
 | Subhra Parijha | Secretary | ✓ | Writes the minutes no one reads and keeps the calendar honest. |
 | Krishna Mundhara | Treasurer | | Counting money that doesn't exist yet and chasing invoices that do. |
 
@@ -130,13 +130,13 @@ The Events team should add the rest of the 100+ events through the admin panel, 
 |---|---|---|---|
 | Aryan Wesavkar | Cybersecurity Head | ✓ | Breaks things on purpose so the rest of us don't have to. |
 | Amey Thanekar | Cybersecurity Co-Head | | Backup paranoia. Runs the CTFs. Knows your password was in a dump. |
-| Sachman Chadha | AI/ML Head | | Trains models and writes prompts like spells. Hallucinates, but on purpose. |
+| Sachman Chadha | AI/ML Head | ✓ | Trains models and writes prompts like spells. Hallucinates, but on purpose. |
 | Sanchita Pawar | AI/ML Co-Head | ✓ | Tames the GPU bill and reads the arXiv so the rest of the team can pretend they did. |
-| Siddhi Pandey | IoT Head | | Solders things to other things. Owns at least four broken Arduinos. |
-| **TBD** | IoT Co-Head | | Has a favourite sensor. Won't admit which. |
+| Siddhi Pandey | IoT Head | ✓ | Solders things to other things. Owns at least four broken Arduinos. |
+| Aditi Panchal | IoT Co-Head | ✓ | Has a favourite sensor. Won't admit which. Solders better than the head. |
 | Ishwar Suthar | Web Dev Head | ✓ | Ships the site, breaks the site, fixes the site. Lives in dev tools. |
 | Rushabh Makwana | Web Dev Co-Head | ✓ | Reviews the PRs the head rubber-stamped. Writes the tests nobody asked for. |
-| Vaishnav Yewale | DevOps Head | | The deploy works on their machine, which is the only machine that matters. |
+| Vaishnav Yewale | DevOps Head | ✓ | The deploy works on their machine, which is the only machine that matters. |
 | Jeeval Patil | DevOps Co-Head | ✓ | Pages the team at 3am when the cluster sneezes. |
 
 ### Events & Operations
@@ -144,18 +144,19 @@ The Events team should add the rest of the 100+ events through the admin panel, 
 |---|---|---|---|
 | Piyush Singh | Event Head | ✓ | Says yes to every event idea, then figures out how. |
 | Sahil Madiwala | Event Co-Head | ✓ | Books the room, books the mic. Brings the clipboard to every meeting. |
-| Siddhesh Pawar | Event Co-Head | | The second clipboard. The reason nothing catches fire. |
+| Siddhesh Pawar | Event Co-Head | ✓ | The second clipboard. The reason nothing catches fire. |
 | Krupa Marakal | Hospitality Head | ✓ | Feeds the team, feeds the speakers. Knows which canteen is open on Sundays. |
 | Jimeet Trivedi | Volunteering Head | ✓ | Herds the volunteers. Has a group chat that pings constantly and a patient face. |
 
 ### Media & Communications
 | Name | Role | Photo | Fun line |
 |---|---|---|---|
-| Disha Suthar | Social Media Head | | Knows which trend to skip and which one to hijack. |
+| Siddhi Bhangale | Design Head | ✓ | Turns rough napkin sketches into pixel-perfect Figma components. Argues about kerning and grid systems. |
+| Disha Suthar | Social Media Head | ✓ | Knows which trend to skip and which one to hijack. |
 | Devyani Palaye | Social Media Co-Head | | Holds the brand voice together when everyone wants to be funny. |
 | Maahi Nagdeote | Editor | | Reads the writing twice, fixes it once. The reason the posts sound human. |
 
-**Total:** 1 faculty + 23 students = 24 (one TBD).
+**Total:** 1 faculty + 24 students = 25.
 **Note:** check name spellings with each person before launch (for example "Chadha" vs "Chadhaa").
 
 ## 11. Copy voice

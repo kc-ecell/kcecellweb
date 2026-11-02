@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** `[01] // WHAT WE RUN` — mono label with the index in lime. */
+/** Lowercase mono eyebrow with a small emerald index, e.g. "02 · events". */
 export function Eyebrow({
   index,
   children,
@@ -11,12 +11,9 @@ export function Eyebrow({
   className?: string;
 }) {
   return (
-    <p className={cn("label-mono", className)}>
-      {index ? <span className="text-lime">[{index}]</span> : null}{" "}
-      <span>
-        {"// "}
-        {children}
-      </span>
+    <p className={cn("label-mono flex items-center gap-2", className)}>
+      {index ? <span className="text-lime">{index}</span> : null}
+      <span>{children}</span>
     </p>
   );
 }

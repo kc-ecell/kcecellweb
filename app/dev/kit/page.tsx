@@ -10,6 +10,10 @@ import { Kbd } from "@/components/ui/Kbd";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ScrambleText } from "@/components/motion/ScrambleText";
+import { Reveal } from "@/components/motion/Reveal";
+import { CountUp } from "@/components/motion/CountUp";
+import { Magnetic } from "@/components/motion/Magnetic";
+import { Tilt } from "@/components/motion/Tilt";
 
 export const metadata = { robots: { index: false, follow: false } };
 
@@ -96,10 +100,32 @@ export default function DevKit() {
         </div>
       </Row>
 
+      <Row title="Motion — reveal & count">
+        <Reveal>
+          <Card className="w-full max-w-xs">
+            <p className="text-sm">I fade + rise when scrolled into view.</p>
+          </Card>
+        </Reveal>
+        <span className="font-display text-lime text-5xl font-extrabold">
+          <CountUp value={500} suffix="+" />
+        </span>
+      </Row>
+
+      <Row title="Motion — magnetic & tilt (full tier)">
+        <Magnetic>
+          <Button>Pull me</Button>
+        </Magnetic>
+        <Tilt className="w-40">
+          <Card>
+            <p className="text-sm">Tilt to pointer</p>
+          </Card>
+        </Tilt>
+      </Row>
+
       <p className="text-fg-dim mt-10 text-xs">
-        Deferred to the next step (need GSAP / Lenis / Motion): Reveal,
-        RevealGroup, CountUp, Magnetic, Marquee, Tilt, custom cursor, page
-        transitions.
+        Site-wide and not shown here: the custom cursor (full-tier desktop) and
+        per-navigation page transitions. The lime-scanline View Transition is a
+        Phase 4 upgrade.
       </p>
     </Container>
   );

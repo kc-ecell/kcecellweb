@@ -1,0 +1,7 @@
+# Normalise line endings across the mixed-OS student team.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.woff2 binary
