@@ -132,6 +132,7 @@ export function PageCritters({ count = 10 }: { count?: number }) {
     let clock = 0;
     let last = performance.now();
     let isTabVisible = !document.hidden;
+    let viewportMode = false;
 
     const critters: Critter[] = [];
 
@@ -143,25 +144,25 @@ export function PageCritters({ count = 10 }: { count?: number }) {
     const spawnCritters = () => {
       critters.length = 0;
       const effectiveW = w > 0 ? w : parent.clientWidth || window.innerWidth;
-      const effectiveH =
-        h > 0 ? h : Math.max(parent.scrollHeight, window.innerHeight, 900);
+      const effectiveH = h > 0 ? h : parent.offsetHeight || window.innerHeight;
 
       // On mobile screens, slightly fewer to keep clarity
-      const n = Math.max(
-        4,
-        Math.min(count, Math.floor(effectiveW / (effectiveW < 640 ? 70 : 100))),
-      );
+      const n =
+        effectiveW < 768
+          ? 3
+          : Math.max(4, Math.min(count, Math.floor(effectiveW / 100)));
 
       for (let i = 0; i < n; i++) {
-        // Distribute home elevation across the full page height (from 8% to 92%)
-        const ratio = n === 1 ? 0.5 : 0.08 + (i / (n - 1)) * 0.84;
+        // Random spot inside this critter's own slice of the page: different on
+        // every load, never clumped, always within the page.
+        const ratio = 0.08 + ((i + Math.random()) / n) * 0.84;
         const homeY = Math.round(ratio * effectiveH);
         const bandTop = Math.max(60, homeY - 45);
         const bandBottom = Math.min(effectiveH - 40, homeY + 45);
 
         const c: Critter = {
           id: i,
-          x: ((i + 0.5) / n) * effectiveW + rand(-30, 30),
+          x: rand(30, Math.max(31, effectiveW - 30)),
           y: rand(bandTop, bandBottom),
           homeY,
           bandTop,
@@ -198,22 +199,19 @@ export function PageCritters({ count = 10 }: { count?: number }) {
     };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      viewportMode = window.innerWidth < 768;
+      // Pixel art needs no retina canvas; 1x keeps phones smooth
+      const dpr = viewportMode ? 1 : Math.min(window.devicePixelRatio || 1, 2);
       // On narrow screens pages get very tall, so critters spread across the whole
       // page are almost never on screen (and a page-tall canvas can exceed mobile
       // canvas limits). There, pin the canvas to the viewport instead.
-      const viewportMode = window.innerWidth < 768;
       canvas.style.position = viewportMode ? "fixed" : "";
       const newW = viewportMode
         ? window.innerWidth
         : parent.clientWidth || window.innerWidth;
-      const newH = viewportMode
-        ? window.innerHeight
-        : Math.max(
-            parent.scrollHeight,
-            parent.clientHeight,
-            window.innerHeight,
-          );
+      // offsetHeight, not scrollHeight: the canvas counts towards scrollHeight, so
+      // it could never shrink and left blank space after the footer on short pages.
+      const newH = viewportMode ? window.innerHeight : parent.offsetHeight;
 
       if (newW === 0 || newH === 0) return;
 
@@ -237,8 +235,7 @@ export function PageCritters({ count = 10 }: { count?: number }) {
           c.x = clamp((c.x / oldW) * w, 25, w - 25);
           c.tx = clamp((c.tx / oldW) * w, 25, w - 25);
 
-          const ratio = (i + 0.5) / critters.length;
-          c.homeY = Math.round((0.08 + ratio * 0.84) * h);
+          c.homeY = Math.round((c.homeY / oldH) * h);
           c.bandTop = Math.max(60, c.homeY - 45);
           c.bandBottom = Math.min(h - 40, c.homeY + 45);
           c.y = clamp((c.y / oldH) * h, c.bandTop, c.bandBottom);
@@ -879,6 +876,11 @@ export function PageCritters({ count = 10 }: { count?: number }) {
       }
 
       const now = performance.now();
+      // Phones: draw at ~30fps to leave the main thread free for scrolling
+      if (viewportMode && now - last < 30) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const dt = Math.min(1 / 30, (now - last) / 1000);
       last = now;
       clock += dt;

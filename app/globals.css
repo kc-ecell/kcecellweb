@@ -1399,3 +1399,28 @@ html[data-retro-arcade="true"] {
   filter: contrast(1.25) saturate(1.8) hue-rotate(15deg);
   image-rendering: pixelated;
 }
+
+/* Phones: blur and per-image GPU layers are the costliest things while scrolling */
+@media (max-width: 767.98px) {
+  .site-header {
+    background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .team-photo-wrap img {
+    transform: none;
+  }
+  .team-photo-wrap img.team-photo-bw {
+    will-change: auto;
+  }
+  .animate-ping {
+    animation: none;
+  }
+}

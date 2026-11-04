@@ -1,5 +1,6 @@
 "use client";
 
+import { requestOtp, verifyOtp } from "@/lib/actions/auth";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useFounder } from "@/lib/game/FounderContext";
@@ -77,8 +78,10 @@ export function Terminal() {
 
   // Secret admin login state machine: 'idle' | 'awaiting_email' | 'awaiting_code' | 'granted'
   const [loginStep, setLoginStep] = useState<
-    "idle" | "awaiting_email" | "awaiting_code" | "granted"
+    "idle" | "awaiting_email" | "sending" | "awaiting_code" | "granted"
   >("idle");
+  const loginEmailRef = useRef("");
+  const loginTriesRef = useRef(0);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -144,6 +147,50 @@ export function Terminal() {
     const raw = cmdStr.trim();
     if (!raw) return;
 
+    // Login input never goes to history, and the code is never echoed
+    if (loginStep === "awaiting_email") {
+      addLog(`email: ${raw}`, "input");
+      loginEmailRef.current = raw;
+      setLoginStep("sending");
+      void requestOtp(raw).then(() => {
+        addLog(
+          "> if this address has clearance, a 6-digit code is on its way.",
+          "accent",
+        );
+        loginTriesRef.current = 0;
+        setLoginStep("awaiting_code");
+      });
+      return;
+    }
+
+    if (loginStep === "awaiting_code") {
+      addLog("code: ● ● ● ● ● ●", "input");
+      setLoginStep("sending");
+      void verifyOtp(loginEmailRef.current, raw)
+        .catch(() => ({ ok: false }))
+        .then(({ ok }) => {
+          if (ok) {
+            setLoginStep("granted");
+            addLog("ACCESS GRANTED", "accent");
+            addLog("Routing to admin partition...", "system");
+            if (state.prefs.sound) soundEngine.playLevelUp();
+            setTimeout(() => {
+              // Full load so the new session cookie reaches the server
+              window.location.assign("/admin");
+            }, 1200);
+            return;
+          }
+          loginTriesRef.current += 1;
+          const left = 5 - loginTriesRef.current;
+          addLog(`ACCESS DENIED · attempts remaining: ${left}`, "error");
+          if (state.prefs.sound) soundEngine.playTerminalError();
+          setLoginStep(left > 0 ? "awaiting_code" : "idle");
+        });
+      return;
+    }
+
+    if (loginStep !== "idle") return;
+
     // Add user input to logs
     addLog(`guest@ecell:~$ ${raw}`, "input");
 
@@ -155,35 +202,6 @@ export function Terminal() {
     const parts = raw.split(/\s+/);
     const cmd = parts[0]?.toLowerCase() ?? "";
     const arg = parts.slice(1).join(" ").trim().toLowerCase();
-
-    // Handle Secret Admin Login step
-    if (loginStep === "awaiting_email") {
-      setLoginStep("awaiting_code");
-      addLog(
-        "> if this address has clearance, a 6-digit code is on its way.",
-        "accent",
-      );
-      addLog("code: _", "system");
-      return;
-    }
-
-    if (loginStep === "awaiting_code") {
-      if (raw.length >= 4) {
-        setLoginStep("granted");
-        addLog("ACCESS GRANTED", "accent");
-        addLog("Routing to admin partition...", "system");
-        if (state.prefs.sound) soundEngine.playLevelUp();
-        setTimeout(() => {
-          setTerminalOpen(false);
-          router.push("/admin");
-        }, 1200);
-      } else {
-        addLog("ACCESS DENIED: invalid code format.", "error");
-        if (state.prefs.sound) soundEngine.playTerminalError();
-        setLoginStep("idle");
-      }
-      return;
-    }
 
     // Award public command usage
     if (PUBLIC_COMMANDS.includes(cmd)) {
@@ -262,7 +280,6 @@ export function Terminal() {
         addLog(
           "  exit                Close the dropdown console (or press Esc / `)",
         );
-        addLog("  sudo login          Staff authentication portal");
         break;
 
       case "whoami":
@@ -518,7 +535,6 @@ export function Terminal() {
         if (arg === "login") {
           setLoginStep("awaiting_email");
           addLog("[sudo] authentication required", "accent");
-          addLog("email: _", "system");
         } else {
           award("egg:sudo", { xp: 100 });
           addLog(

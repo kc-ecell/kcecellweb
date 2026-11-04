@@ -8,6 +8,7 @@ import { LevelUpBanner } from "./LevelUpBanner";
 import { FounderDrawer } from "./FounderDrawer";
 import { EasterEggManager } from "./EasterEggManager";
 import { Terminal } from "@/components/terminal/Terminal";
+import { TerminalButton } from "@/components/terminal/TerminalButton";
 import { TerminalDiscoveryToast } from "@/components/terminal/TerminalDiscoveryToast";
 
 export function GamificationLayer({ children }: { children: ReactNode }) {
@@ -15,6 +16,7 @@ export function GamificationLayer({ children }: { children: ReactNode }) {
     <FounderProvider>
       {children}
       <Terminal />
+      <TerminalButton />
       <TerminalDiscoveryToast />
       <FounderHUD />
       <XPToast />

@@ -194,6 +194,8 @@ const MEMBERS: Member[] = [
     name: "Devyani Palaye",
     role: "Social Media Co-Head",
     dept: "media",
+    photo: "/team/devyani-palaye.png",
+    photoBw: "/team/devyani-palaye-bw.png",
     bio: "drafts the captions the head edits. holds the brand voice together when everyone wants to be funny.",
   },
   {

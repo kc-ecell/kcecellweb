@@ -47,7 +47,7 @@ export function TerminalDiscoveryToast() {
   return (
     <aside
       aria-label="Secret terminal discovery prompt"
-      className="animate-in slide-in-from-bottom-4 fade-in pointer-events-auto fixed right-5 bottom-20 z-[54] w-[calc(100vw-2.5rem)] max-w-sm duration-300 sm:bottom-5 sm:max-w-md"
+      className="animate-in slide-in-from-top-4 fade-in pointer-events-auto fixed right-5 bottom-20 z-[54] w-[calc(100vw-2.5rem)] max-w-sm duration-300 sm:max-w-md md:top-24 md:bottom-auto"
     >
       <div className="relative overflow-hidden rounded-xl border border-emerald-500/40 bg-[#090a18]/95 p-4 font-mono text-neutral-200 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-md">
         {/* Subtle accent border line */}
