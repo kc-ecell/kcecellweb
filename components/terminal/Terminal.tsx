@@ -83,6 +83,11 @@ export function Terminal() {
   const loginEmailRef = useRef("");
   const loginTriesRef = useRef(0);
 
+  // Closing the terminal always abandons a login in progress
+  if (!terminalOpen && loginStep !== "idle" && loginStep !== "granted") {
+    setLoginStep("idle");
+  }
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -128,6 +133,8 @@ export function Terminal() {
 
       // Escape key closes terminal
       if (e.key === "Escape" && terminalOpen) {
+        setMatrixActive(false);
+        setPanicActive(false);
         setTerminalOpen(false);
       }
     };
@@ -147,19 +154,29 @@ export function Terminal() {
     const raw = cmdStr.trim();
     if (!raw) return;
 
+    // Leaving the login must always work, whatever step it is on
+    if (loginStep !== "idle" && /^(exit|quit|cancel|clear|q)$/i.test(raw)) {
+      setLoginStep("idle");
+      addLog("login cancelled.", "system");
+      return;
+    }
+
     // Login input never goes to history, and the code is never echoed
     if (loginStep === "awaiting_email") {
       addLog(`email: ${raw}`, "input");
       loginEmailRef.current = raw;
       setLoginStep("sending");
-      void requestOtp(raw).then(() => {
-        addLog(
-          "> if this address has clearance, a 6-digit code is on its way.",
-          "accent",
-        );
-        loginTriesRef.current = 0;
-        setLoginStep("awaiting_code");
-      });
+      void requestOtp(raw)
+        .catch(() => null)
+        .then(() => {
+          addLog(
+            "> if this address has clearance, a 6-digit code is on its way.",
+            "accent",
+          );
+          addLog("type 'cancel' to leave.", "system");
+          loginTriesRef.current = 0;
+          setLoginStep((step) => (step === "sending" ? "awaiting_code" : step));
+        });
       return;
     }
 
@@ -184,7 +201,9 @@ export function Terminal() {
           const left = 5 - loginTriesRef.current;
           addLog(`ACCESS DENIED · attempts remaining: ${left}`, "error");
           if (state.prefs.sound) soundEngine.playTerminalError();
-          setLoginStep(left > 0 ? "awaiting_code" : "idle");
+          setLoginStep((step) =>
+            step !== "sending" ? step : left > 0 ? "awaiting_code" : "idle",
+          );
         });
       return;
     }
