@@ -172,3 +172,102 @@ export async function getTimeline(): Promise<PublicMilestone[]> {
     onHome: milestone.badge_icon === "home",
   }));
 }
+
+export interface PublicPhoto {
+  id: string;
+  url: string;
+  alt: string;
+  caption: string;
+}
+
+export async function getGallery(): Promise<PublicPhoto[]> {
+  "use cache";
+  cacheTag("gallery");
+  const { data, error } = await createStaticSupabase()
+    .from("gallery_photos")
+    .select("id, path, alt, caption")
+    .order("sort")
+    .order("created_at", { ascending: false });
+  if (error) {
+    cacheLife("minutes");
+    return [];
+  }
+  cacheLife("max");
+  return data.map((photo) => ({
+    id: photo.id,
+    url: mediaUrl(photo.path),
+    alt: photo.alt,
+    caption: photo.caption ?? "",
+  }));
+}
+
+export interface PublicPost {
+  slug: string;
+  title: string;
+  summary: string;
+  author: string;
+  tag: string;
+  date: string;
+  body: string;
+}
+
+const postDate = new Intl.DateTimeFormat("en-IN", {
+  month: "short",
+  year: "numeric",
+  timeZone: "Asia/Kolkata",
+});
+
+const POST_COLUMNS =
+  "slug, title, excerpt, author_name, tags, published_at, body_md";
+
+interface PostRow {
+  slug: string;
+  title: string;
+  excerpt: string;
+  author_name: string;
+  tags: string[];
+  published_at: string | null;
+  body_md: string;
+}
+
+function toPost(row: PostRow): PublicPost {
+  return {
+    slug: row.slug,
+    title: row.title,
+    summary: row.excerpt,
+    author: row.author_name,
+    tag: row.tags[0] ?? "post",
+    date: row.published_at
+      ? postDate.format(new Date(row.published_at)).toLowerCase()
+      : "",
+    body: row.body_md,
+  };
+}
+
+// Hourly, so scheduled posts appear close to their publish time
+export async function getPosts(): Promise<PublicPost[]> {
+  "use cache";
+  cacheTag("posts");
+  const { data, error } = await createStaticSupabase()
+    .from("posts")
+    .select(POST_COLUMNS)
+    .order("published_at", { ascending: false });
+  if (error) {
+    cacheLife("minutes");
+    return [];
+  }
+  cacheLife("hours");
+  return data.map(toPost);
+}
+
+export async function getPost(slug: string): Promise<PublicPost | null> {
+  "use cache";
+  cacheTag("posts");
+  cacheLife("hours");
+  const { data } = await createStaticSupabase()
+    .from("posts")
+    .select(POST_COLUMNS)
+    .eq("slug", slug)
+    .maybeSingle();
+  return data ? toPost(data) : null;
+}

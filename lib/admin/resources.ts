@@ -82,6 +82,32 @@ export const MILESTONE_FIELDS: ResourceField[] = [
   STATUS,
 ];
 
+export const ALBUM_FIELDS: ResourceField[] = [
+  { key: "title", label: "title", type: "text" },
+  { key: "slug", label: "slug (lowercase-with-dashes)", type: "text" },
+  STATUS,
+];
+
+export const POST_FIELDS: ResourceField[] = [
+  { key: "title", label: "title", type: "text", wide: true },
+  { key: "slug", label: "slug (lowercase-with-dashes)", type: "text" },
+  { key: "author_name", label: "author", type: "text" },
+  { key: "tag", label: "tag", type: "text" },
+  {
+    key: "published_at",
+    label: "publish time (IST, future = scheduled, empty = now)",
+    type: "datetime",
+  },
+  { key: "excerpt", label: "excerpt", type: "textarea", max: 240, wide: true },
+  {
+    key: "body_md",
+    label: "article (blank line = new paragraph)",
+    type: "textarea",
+    wide: true,
+  },
+  STATUS,
+];
+
 /** "2026-11-04T10:30" in IST, for a datetime-local input. */
 export function toIstInput(iso: string | null): string {
   if (!iso) return "";

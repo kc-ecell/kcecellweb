@@ -8,6 +8,7 @@ import {
   primaryButtonClass,
 } from "@/components/admin/Field";
 import { deleteMember, saveMember } from "@/lib/actions/admin/team";
+import { toWebp } from "@/lib/admin/image";
 import { createClientSupabase } from "@/lib/supabase/client";
 
 export interface MemberRow {
@@ -25,43 +26,12 @@ export interface MemberRow {
   status: string;
 }
 
-const MAX_SIDE = 1200;
-
-async function toWebp(file: File, grayscale: boolean): Promise<Blob> {
-  const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height));
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(bitmap.width * scale);
-  canvas.height = Math.round(bitmap.height * scale);
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("no canvas");
-  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-
-  if (grayscale) {
-    const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const px = image.data;
-    for (let i = 0; i < px.length; i += 4) {
-      const y = 0.299 * px[i]! + 0.587 * px[i + 1]! + 0.114 * px[i + 2]!;
-      px[i] = px[i + 1] = px[i + 2] = y;
-    }
-    ctx.putImageData(image, 0, 0);
-  }
-
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("encode failed"))),
-      "image/webp",
-      0.88,
-    );
-  });
-}
-
 async function uploadPhotos(colour: File, gray: File | null): Promise<string> {
   const supabase = createClientSupabase();
   const name = `team/${crypto.randomUUID()}`;
   const files: [string, Blob][] = [
-    [`${name}.webp`, await toWebp(colour, false)],
-    [`${name}-bw.webp`, await toWebp(gray ?? colour, !gray)],
+    [`${name}.webp`, (await toWebp(colour, false, 1200)).blob],
+    [`${name}-bw.webp`, (await toWebp(gray ?? colour, !gray, 1200)).blob],
   ];
   for (const [path, blob] of files) {
     const { error } = await supabase.storage

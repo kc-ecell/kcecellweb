@@ -19,8 +19,8 @@ const STAFF_ITEMS: Item[] = [
   { label: "team", href: "/admin/team" },
   { label: "achievements", href: "/admin/achievements" },
   { label: "timeline", href: "/admin/timeline" },
-  { label: "gallery" },
-  { label: "blog" },
+  { label: "gallery", href: "/admin/gallery" },
+  { label: "blog", href: "/admin/blog" },
 ];
 
 const MANAGEMENT_ITEMS: Item[] = [

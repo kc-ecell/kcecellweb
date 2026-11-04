@@ -74,7 +74,19 @@ const MilestoneInput = z.object({
   status,
 });
 
-type Table = "events" | "achievements" | "timeline_milestones";
+const PostInput = z.object({
+  id,
+  title: text("add a title"),
+  slug: z.string().regex(/^[a-z0-9-]+$/, "lowercase letters, numbers, dashes"),
+  author_name: text("add an author"),
+  tag: z.string().trim(),
+  excerpt: text("add an excerpt").max(240, "keep it under 240 characters"),
+  body_md: z.string(),
+  published_at: istDate,
+  status,
+});
+
+type Table = "events" | "achievements" | "timeline_milestones" | "posts";
 
 async function persist(
   table: Table,
@@ -204,4 +216,23 @@ export async function deleteMilestone(recordId: string): Promise<ActionResult> {
     "/admin/timeline",
     recordId,
   );
+}
+
+export async function savePost(input: unknown): Promise<ActionResult> {
+  await requireStaff();
+  const parsed = PostInput.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const { id: recordId, tag, ...row } = parsed.data;
+  return persist("posts", "posts", "/admin/blog", recordId, {
+    ...row,
+    tags: tag ? [tag] : [],
+    published_at:
+      row.published_at ??
+      (row.status === "published" ? new Date().toISOString() : null),
+  });
+}
+
+export async function deletePost(recordId: string): Promise<ActionResult> {
+  await requireStaff();
+  return destroy("posts", "posts", "/admin/blog", recordId);
 }
