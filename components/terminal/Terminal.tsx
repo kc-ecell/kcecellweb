@@ -90,6 +90,30 @@ export function Terminal() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const consoleRef = useRef<HTMLDivElement | null>(null);
+
+  // The log ignores the mouse so critters underneath stay draggable, so wheel
+  // scrolling is forwarded here, and the scrollbar edge is handed back to it.
+  useEffect(() => {
+    const box = consoleRef.current;
+    if (!terminalOpen || !box) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (scrollRef.current) scrollRef.current.scrollTop += e.deltaY;
+    };
+    const onMove = (e: PointerEvent) => {
+      const log = scrollRef.current;
+      if (!log || e.pointerType !== "mouse" || e.buttons) return;
+      const nearBar = log.getBoundingClientRect().right - e.clientX < 20;
+      log.style.pointerEvents = nearBar ? "auto" : "";
+    };
+    box.addEventListener("wheel", onWheel, { passive: false });
+    box.addEventListener("pointermove", onMove);
+    return () => {
+      box.removeEventListener("wheel", onWheel);
+      box.removeEventListener("pointermove", onMove);
+    };
+  }, [terminalOpen]);
 
   // Auto focus input and award XP when terminal opens
   useEffect(() => {
@@ -170,7 +194,7 @@ export function Terminal() {
         .catch(() => null)
         .then(() => {
           addLog(
-            "> if this address has clearance, a 6-digit code is on its way.",
+            "> if this address has clearance, a code is on its way.",
             "accent",
           );
           addLog("type 'cancel' to leave.", "system");
@@ -760,7 +784,11 @@ export function Terminal() {
         </div>
 
         {/* Console Body: Log Output + Interactive Critters Layer */}
-        <div className="relative flex min-h-[220px] flex-1 overflow-hidden">
+        <div
+          ref={consoleRef}
+          data-lenis-prevent
+          className="relative flex min-h-[220px] flex-1 overflow-hidden"
+        >
           {/* Critters Canvas */}
           <TerminalCritters
             onInteract={() => award("critter:interact", { xp: 10 })}
@@ -772,7 +800,7 @@ export function Terminal() {
             ref={scrollRef}
             role="log"
             aria-live="polite"
-            className="pointer-events-none relative z-20 flex-1 space-y-2 overflow-y-auto p-4 leading-relaxed select-text sm:p-5"
+            className="pointer-events-none relative z-20 flex-1 space-y-2 overflow-y-auto overscroll-contain p-4 leading-relaxed select-text sm:p-5 [@media(pointer:coarse)]:pointer-events-auto"
           >
             {logs.map((log) => (
               <div
@@ -817,7 +845,7 @@ export function Terminal() {
               loginStep === "awaiting_email"
                 ? "staff@kccemsr.edu.in"
                 : loginStep === "awaiting_code"
-                  ? "6-digit code"
+                  ? "code from your email"
                   : "type 'help' or any command..."
             }
             className="flex-1 bg-transparent font-mono text-xs text-white outline-none placeholder:text-neutral-600 sm:text-sm"

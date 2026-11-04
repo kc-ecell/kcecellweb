@@ -381,7 +381,10 @@ export function Footer() {
                 ✕
               </button>
             </div>
-            <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto pr-2 text-xs leading-relaxed text-neutral-700">
+            <div
+              data-lenis-prevent
+              className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto overscroll-contain pr-2 text-xs leading-relaxed text-neutral-700"
+            >
               {legalModal === "privacy" ? (
                 <>
                   <p>

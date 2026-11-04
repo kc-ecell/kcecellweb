@@ -72,7 +72,10 @@ export function FounderDrawer() {
         </div>
 
         {/* Content scroll area */}
-        <div className="flex-1 space-y-6 overflow-y-auto p-6 font-mono">
+        <div
+          data-lenis-prevent
+          className="flex-1 space-y-6 overflow-y-auto overscroll-contain p-6 font-mono"
+        >
           {/* Level Progress Card */}
           <div className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#12142d] to-[#0b0c1c] p-5">
             <div className="mb-3 flex items-center justify-between">

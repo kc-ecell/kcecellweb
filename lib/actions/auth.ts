@@ -6,10 +6,11 @@ import { createServerSupabase } from "@/lib/supabase/server";
 
 // Terminal login. See docs/SECRET_ADMIN_ACCESS.md §4.
 const emailSchema = z.string().trim().toLowerCase().email();
+// Length follows the Supabase "Email OTP Length" setting (6 to 10 digits)
 const codeSchema = z
   .string()
-  .trim()
-  .regex(/^\d{6}$/);
+  .transform((code) => code.replace(/\s/g, ""))
+  .pipe(z.string().regex(/^\d{6,10}$/));
 const MIN_REQUEST_MS = 600;
 
 async function isActiveStaff(email: string) {
