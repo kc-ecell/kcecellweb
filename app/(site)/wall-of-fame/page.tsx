@@ -1,47 +1,8 @@
-const WINS = [
-  {
-    year: "2025",
-    title: "Smart India Hackathon 2025: Hack4Hygiene",
-    category: "hackathon",
-    organizer: "Ministry of Education & AICTE, Govt. of India",
-    result: "1st Place Winner",
-    tagClass: "t-winner",
-    description:
-      "National champions in Smart India Hackathon 2025. Team Hack4Hygiene engineered an automated, IoT-enabled public sanitation tracking and alerts network to solve municipal cleanliness challenges.",
-  },
-  {
-    year: "2024",
-    title: "National Entrepreneurship Challenge (NEC)",
-    category: "entrepreneurship",
-    organizer: "E-Cell, IIT Bombay",
-    result: "National Finalist",
-    tagClass: "t-competition",
-    description:
-      "Collaborated with E-Cell IIT Bombay through an intensive 6-month national competition assessing venture pipeline, campus startup density, and execution quality.",
-  },
-  {
-    year: "2019",
-    title: "Innovation Mela",
-    category: "innovation",
-    organizer: "Regional Innovation Consortium",
-    result: "1st Place",
-    tagClass: "t-hackathon",
-    description:
-      "1st place for student-led hardware and software prototypes incubated within KCCEMSR's technical labs.",
-  },
-  {
-    year: "2018",
-    title: "National Entrepreneurship Challenge (NEC)",
-    category: "entrepreneurship",
-    organizer: "E-Cell, IIT Bombay",
-    result: "2nd Place Nationally",
-    tagClass: "t-winner",
-    description:
-      "Secured 2nd place on the main stage of IIT Bombay's E-Summit, establishing KCCEMSR as a powerhouse among collegiate entrepreneurship cells in India.",
-  },
-];
+import { getAchievements } from "@/lib/data/public";
 
-export default function WallOfFamePage() {
+export default async function WallOfFamePage() {
+  const wins = await getAchievements();
+
   return (
     <div className="wrap pt-16 pb-28">
       <div className="section-head mt-0">
@@ -58,9 +19,9 @@ export default function WallOfFamePage() {
       </div>
 
       <div className="mt-12 grid gap-6">
-        {WINS.map((win) => (
+        {wins.map((win) => (
           <div
-            key={win.title + win.year}
+            key={win.id}
             className="border-line bg-surface hover:border-line-strong hover:bg-sunk border p-8 transition-colors"
           >
             <div className="border-line mb-6 flex flex-wrap items-baseline justify-between gap-4 border-b pb-4">
@@ -75,9 +36,11 @@ export default function WallOfFamePage() {
             <h3 className="text-ink mb-2 text-2xl font-normal tracking-tight">
               {win.title}
             </h3>
-            <p className="text-muted mb-4 text-sm">
-              Organized by {win.organizer}
-            </p>
+            {win.organizer && (
+              <p className="text-muted mb-4 text-sm">
+                Organized by {win.organizer}
+              </p>
+            )}
             <p className="text-ink-2 max-w-3xl text-base leading-relaxed">
               {win.description}
             </p>

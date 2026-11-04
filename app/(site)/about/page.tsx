@@ -1,69 +1,9 @@
 import { ButtonLink } from "@/components/ui/Button";
+import { getTimeline } from "@/lib/data/public";
 
-const TIMELINE = [
-  {
-    lvl: "01",
-    year: "2016",
-    title: "E-Cell is founded",
-    desc: "Established with the vision of fostering entrepreneurship among students, creating a platform where ideas could be explored, developed, and transformed into ventures.",
-  },
-  {
-    lvl: "02",
-    year: "2017",
-    title: "First experiments",
-    desc: "Expanded into Google Crowdsource programs, drone workshops, and entrepreneurship bootcamps, encouraging students to experiment with modern technology.",
-  },
-  {
-    lvl: "03",
-    year: "2018",
-    title: "National stage at IIT Bombay",
-    desc: "Secured 2nd place at IIT Bombay's National Entrepreneurship Challenge, marking E-Cell's arrival on the national collegiate entrepreneurship stage.",
-  },
-  {
-    lvl: "04",
-    year: "2019",
-    title: "Innovation Mela win",
-    desc: "Won 1st place at the Innovation Mela while several student ventures and technical projects began incubation under the Cell.",
-  },
-  {
-    lvl: "05",
-    year: "2020",
-    title: "RESPAWN & going online",
-    desc: "RESPAWN brought hundreds of students together for an inter-college gaming and developer event. When the pandemic hit, E-Cell shifted online and kept building.",
-  },
-  {
-    lvl: "06",
-    year: "2021–23",
-    title: "Beyond events",
-    desc: "Moved beyond one-off events into real-world projects, international collaborations, and tech-driven solutions with stronger incubation.",
-  },
-  {
-    lvl: "07",
-    year: "2024",
-    title: "NEC grand finale",
-    desc: "Collaborated with E-Cell IIT Bombay and reached the national grand finale of the National Entrepreneurship Challenge among top collegiate teams across India.",
-  },
-  {
-    lvl: "08",
-    year: "2025",
-    title: "SIH 2025 winners",
-    desc: "Continued competing nationally. E-Cell team Hack4Hygiene won the prestigious Smart India Hackathon 2025 organized by the Ministry of Education & AICTE.",
-  },
-  {
-    lvl: "09",
-    year: "2026",
-    title: "Singularity 2026 (completed in January)",
-    desc: "Celebrated ten years of student building with our landmark 24-hour hackathon, uniting over 50 prototype teams and early venture grants.",
-  },
-  {
-    lvl: "10",
-    year: "2027",
-    title: "Singularity 2027 & Detroits (upcoming)",
-    desc: "The next frontier: our upcoming Singularity 2027 hackathon and Detroits hardware & robotics arena, pushing collegiate engineering further.",
-  },
-];
+export default async function AboutPage() {
+  const timeline = await getTimeline();
 
-export default function AboutPage() {
   return (
     <div className="wrap pt-16 pb-28">
       {/* Page Header */}
@@ -128,18 +68,18 @@ export default function AboutPage() {
       </div>
 
       <div className="timeline-list">
-        {TIMELINE.map((item) => (
-          <div key={item.lvl} className="timeline-card">
+        {timeline.map((item) => (
+          <div key={item.id} className="timeline-card">
             <div className="flex items-baseline justify-between">
               <span className="timeline-year">{item.year}</span>
               <span className="text-muted font-mono text-xs">
-                LVL {item.lvl}
+                LVL {String(item.level).padStart(2, "0")}
               </span>
             </div>
             <h3 className="text-ink text-lg font-medium tracking-tight">
               {item.title}
             </h3>
-            <p>{item.desc}</p>
+            <p>{item.description}</p>
           </div>
         ))}
       </div>

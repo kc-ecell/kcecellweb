@@ -1,95 +1,16 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/Button";
 import { TeamCard } from "@/components/site/TeamCard";
-import { getStats, getTeam } from "@/lib/data/public";
-
-const EVENTS = [
-  {
-    num: "01",
-    title: "singularity 2027",
-    tag: "upcoming",
-    tagClass: "t-hackathon",
-    location: "on campus · thane",
-    date: "flagship 2027",
-    summary:
-      "the next chapter of our flagship 24-hour hackathon: uniting student builders, mentors, and early-stage capital.",
-    href: "/events#singularity-2027",
-  },
-  {
-    num: "02",
-    title: "detroits",
-    tag: "upcoming",
-    tagClass: "t-competition",
-    location: "engineering grounds",
-    date: "upcoming 2026–27",
-    summary:
-      "high-octane engineering, robotics competitions, and hardware prototyping challenging inter-college student teams.",
-    href: "/events#detroits",
-  },
-  {
-    num: "03",
-    title: "singularity 2026",
-    tag: "completed",
-    tagClass: "t-winner",
-    location: "on campus · thane",
-    date: "january 2026",
-    summary:
-      "celebrated 10 years of student builders with our biggest 24-hour hackathon, featuring 50+ prototype submissions and seed funding.",
-    href: "/events#singularity-2026",
-  },
-  {
-    num: "04",
-    title: "hack4hygiene · sih 2025",
-    tag: "winner",
-    tagClass: "t-winner",
-    location: "national stage",
-    date: "sih 2025",
-    summary:
-      "e-cell teams took on the smart india hackathon 2025, bringing home 1st place nationally with hack4hygiene.",
-    href: "/wall-of-fame",
-  },
-];
-
-const TIMELINE_HIGHLIGHTS = [
-  {
-    year: "2016",
-    title: "e-cell is founded",
-    desc: "established at kccemsr to give students a space to turn ideas into scalable ventures.",
-  },
-  {
-    year: "2018",
-    title: "national stage at iit-b",
-    desc: "secured 2nd place at iit bombay's national entrepreneurship challenge.",
-  },
-  {
-    year: "2020",
-    title: "respawn + online pivot",
-    desc: "brought hundreds of students together for gaming and shifted building activities online.",
-  },
-  {
-    year: "2024",
-    title: "nec grand finale",
-    desc: "reached the national grand finale of the entrepreneurship challenge with e-cell iit bombay.",
-  },
-  {
-    year: "2025",
-    title: "sih 2025 winners",
-    desc: "hack4hygiene won the smart india hackathon 2025 national competition.",
-  },
-  {
-    year: "2026",
-    title: "singularity 2026 (completed in jan)",
-    desc: "celebrated a decade of student founders with our biggest 24-hour hackathon platform to date.",
-  },
-  {
-    year: "2027",
-    title: "singularity 2027 & detroits",
-    desc: "upcoming flagship hackathon and high-stakes engineering robotics competition.",
-  },
-];
+import { getEvents, getStats, getTeam, getTimeline } from "@/lib/data/public";
 
 export default async function Home() {
-  const [stats, team] = await Promise.all([getStats(), getTeam()]);
+  const [stats, team, events, timeline] = await Promise.all([
+    getStats(),
+    getTeam(),
+    getEvents(),
+    getTimeline(),
+  ]);
+  const homeMilestones = timeline.filter((item) => item.onHome);
   const featuredTeam = team.filter((m) => m.tier !== "faculty").slice(0, 8);
   const members = stats.find((stat) => stat.slug === "members");
 
@@ -166,9 +87,9 @@ export default async function Home() {
         </div>
 
         <ul className="card-list card-list--plain">
-          {EVENTS.map((event) => (
-            <li key={event.num} className="card-row">
-              <Link href={event.href}>
+          {events.slice(0, 4).map((event) => (
+            <li key={event.id} className="card-row">
+              <Link href={`/events#${event.slug}`}>
                 <h3>{event.title}</h3>
                 <span className="arrow" aria-hidden="true">
                   →
@@ -177,10 +98,10 @@ export default async function Home() {
                 <div className="meta">
                   <span className={`tag ${event.tagClass}`}>
                     <span className="dot" />
-                    {event.tag}
+                    {event.upcoming ? "upcoming" : "completed"}
                   </span>
-                  <span>{event.location}</span>
-                  <span>{event.date}</span>
+                  <span>{event.venue}</span>
+                  <span>{event.dateLabel}</span>
                 </div>
               </Link>
             </li>
@@ -252,13 +173,13 @@ export default async function Home() {
         </div>
 
         <div className="timeline-list">
-          {TIMELINE_HIGHLIGHTS.map((milestone) => (
-            <div key={milestone.year} className="timeline-card">
+          {homeMilestones.map((milestone) => (
+            <div key={milestone.id} className="timeline-card">
               <div className="timeline-year">{milestone.year}</div>
               <h4 className="text-ink text-base font-medium tracking-tight">
                 {milestone.title}
               </h4>
-              <p>{milestone.desc}</p>
+              <p>{milestone.description}</p>
             </div>
           ))}
         </div>

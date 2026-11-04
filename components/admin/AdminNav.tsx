@@ -15,10 +15,10 @@ interface Item {
 
 const STAFF_ITEMS: Item[] = [
   { label: "dashboard", href: "/admin" },
-  { label: "events" },
+  { label: "events", href: "/admin/events" },
   { label: "team", href: "/admin/team" },
-  { label: "achievements" },
-  { label: "timeline" },
+  { label: "achievements", href: "/admin/achievements" },
+  { label: "timeline", href: "/admin/timeline" },
   { label: "gallery" },
   { label: "blog" },
 ];
