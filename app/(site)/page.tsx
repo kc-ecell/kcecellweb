@@ -1,13 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
-
-const STATS = [
-  { label: "active members", value: "500+" },
-  { label: "events & workshops", value: "100+" },
-  { label: "industry partners", value: "20+" },
-  { label: "student initiatives", value: "10+" },
-];
+import { TeamCard } from "@/components/site/TeamCard";
+import { getStats, getTeam } from "@/lib/data/public";
 
 const EVENTS = [
   {
@@ -94,74 +88,11 @@ const TIMELINE_HIGHLIGHTS = [
   },
 ];
 
-interface FeaturedMember {
-  name: string;
-  role: string;
-  photo?: string;
-  photoBw?: string;
-  bio: string;
-}
+export default async function Home() {
+  const [stats, team] = await Promise.all([getStats(), getTeam()]);
+  const featuredTeam = team.filter((m) => m.tier !== "faculty").slice(0, 8);
+  const members = stats.find((stat) => stat.slug === "members");
 
-const FEATURED_TEAM: FeaturedMember[] = [
-  {
-    name: "Raaj Patkar",
-    role: "President",
-    photo: "/team/raaj-patkar.png",
-    photoBw: "/team/raaj-patkar-bw.png",
-    bio: "runs the show, calls the meetings nobody asked for, and somehow still finds time to sleep. probably.",
-  },
-  {
-    name: "Daivik Pawar",
-    role: "Vice President",
-    photo: "/team/daivik-pawar.png",
-    photoBw: "/team/daivik-pawar-bw.png",
-    bio: "the president when the president is busy. knows where every document is, including the one you lost.",
-  },
-  {
-    name: "Subhra Parijha",
-    role: "Secretary",
-    photo: "/team/secretary.png",
-    photoBw: "/team/secretary-bw.png",
-    bio: "writes the minutes no one reads, sends the emails no one answers, and keeps the calendar honest.",
-  },
-  {
-    name: "Ishwar Suthar",
-    role: "Web Dev Head",
-    photo: "/team/web-dev-head.png",
-    photoBw: "/team/web-dev-head-bw.png",
-    bio: "ships the site, breaks the site, fixes the site. lives in dev tools.",
-  },
-  {
-    name: "Rushabh Makwana",
-    role: "Web Dev Co-Head",
-    photo: "/team/web-dev-cohead.png",
-    photoBw: "/team/web-dev-cohead-bw.png",
-    bio: "reviews the prs the head rubber-stamped. writes the tests nobody asked for.",
-  },
-  {
-    name: "Sachman Chadha",
-    role: "AI/ML Head",
-    photo: "/team/sachman-chadha.png",
-    photoBw: "/team/sachman-chadha-bw.png",
-    bio: "trains models on data we should not have. writes prompts like spells. hallucinates, but on purpose.",
-  },
-  {
-    name: "Sanchita Pawar",
-    role: "AI/ML Co-Head",
-    photo: "/team/ai-ml-cohead.png",
-    photoBw: "/team/ai-ml-cohead-bw.png",
-    bio: "tames the gpu bill and reads the arxiv so the rest of the team can pretend they did.",
-  },
-  {
-    name: "Aryan Wesavkar",
-    role: "Cybersecurity Head",
-    photo: "/team/cyber-head.png",
-    photoBw: "/team/cyber-head-bw.png",
-    bio: "breaks things on purpose so the rest of us don't have to.",
-  },
-];
-
-export default function Home() {
   return (
     <>
       {/* 1. Hero Media: Pixel art illustration from Commons Gigs */}
@@ -215,10 +146,10 @@ export default function Home() {
       {/* 3. At a Glance Stats */}
       <section className="wrap" aria-label="At a glance">
         <dl className="stats">
-          {STATS.map((s) => (
-            <div key={s.label}>
+          {stats.map((s) => (
+            <div key={s.slug}>
               <dt>{s.label}</dt>
-              <dd>{s.value}</dd>
+              <dd>{s.display}</dd>
             </div>
           ))}
         </dl>
@@ -338,50 +269,14 @@ export default function Home() {
         <div className="section-head">
           <h2 id="team-heading">the builders</h2>
           <p>
-            24 students across five departments run e-cell this year. here are
-            some of the people behind the work.
+            {team.length} people across five departments run e-cell this year.
+            here are some of the people behind the work.
           </p>
         </div>
 
         <div className="team-grid">
-          {FEATURED_TEAM.map((member) => (
-            <div key={member.name} className="team-card">
-              <div className="team-photo-wrap">
-                {member.photo ? (
-                  <>
-                    <Image
-                      src={member.photo}
-                      alt={member.name}
-                      width={340}
-                      height={340}
-                      className="team-photo-color"
-                    />
-                    {member.photoBw && (
-                      <Image
-                        src={member.photoBw}
-                        alt=""
-                        aria-hidden="true"
-                        width={340}
-                        height={340}
-                        className="team-photo-bw"
-                      />
-                    )}
-                  </>
-                ) : (
-                  <div className="bg-sunk text-accent font-display flex h-full w-full items-center justify-center text-4xl font-normal select-none">
-                    {member.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </div>
-                )}
-              </div>
-              <div className="team-info">
-                <h4>{member.name}</h4>
-                <span className="role">{member.role}</span>
-                <p className="bio">{member.bio}</p>
-              </div>
-            </div>
+          {featuredTeam.map((member) => (
+            <TeamCard key={member.id} member={member} />
           ))}
         </div>
 
@@ -404,7 +299,8 @@ export default function Home() {
               <span aria-hidden="true">partner with e-cell →</span>
             </span>
             <span className="sub">
-              talk to 500+ student founders and engineers at kccemsr
+              talk to {members?.display} student founders and engineers at
+              kccemsr
             </span>
           </div>
           <span className="arrow" aria-hidden="true">

@@ -16,7 +16,7 @@ interface Item {
 const STAFF_ITEMS: Item[] = [
   { label: "dashboard", href: "/admin" },
   { label: "events" },
-  { label: "team" },
+  { label: "team", href: "/admin/team" },
   { label: "achievements" },
   { label: "timeline" },
   { label: "gallery" },
@@ -25,7 +25,7 @@ const STAFF_ITEMS: Item[] = [
 
 const MANAGEMENT_ITEMS: Item[] = [
   { label: "messages", roles: ["owner", "admin"] },
-  { label: "stats", roles: ["owner", "admin"] },
+  { label: "stats", href: "/admin/stats", roles: ["owner", "admin"] },
   { label: "settings", roles: ["owner", "admin"] },
   { label: "staff", roles: ["owner"] },
   { label: "audit log", roles: ["owner", "admin"] },
@@ -54,7 +54,10 @@ export function AdminNav({ role }: { role: Role }) {
         </li>
       );
     }
-    const active = pathname === item.href;
+    const active =
+      item.href === "/admin"
+        ? pathname === "/admin"
+        : pathname.startsWith(item.href);
     return (
       <li key={item.label}>
         <Link

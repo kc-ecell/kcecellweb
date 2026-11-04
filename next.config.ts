@@ -3,6 +3,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: new URL(
+          process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://localhost",
+        ).hostname,
+        pathname: "/storage/v1/object/public/media/**",
+      },
+    ],
+  },
   partialPrefetching: true,
   turbopack: {
     rules: {
