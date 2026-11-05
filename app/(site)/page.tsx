@@ -111,11 +111,11 @@ export default async function Home() {
 
       {/* 5. What We Do: The 4 Core Programs */}
       <section
-        className="wrap"
+        className="wrap programs"
         id="programs"
         aria-labelledby="programs-heading"
       >
-        <div className="section-head">
+        <div className="programs-head">
           <h2 id="programs-heading">what we do</h2>
           <p>
             from first-year ideation to pitching in front of national panels.
@@ -123,7 +123,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <div className="program-grid">
+        <div className="program-list">
           <div className="program">
             <h3>hackathons</h3>
             <p>

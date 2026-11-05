@@ -136,7 +136,7 @@ Measure: body text max `68ch`.
 | Component | Anatomy | Notes |
 |---|---|---|
 | `Button` | Primary: lime fill, `lime-ink` text, mono label, 48px tall, `radius-sm`. Secondary: 1px line border, fg text. Ghost: text + arrow. | Primary is magnetic on `full`. Label = verb + object ("See upcoming events"). |
-| `Panel` | Terminal chrome: top bar with 3 status dots (not mac traffic lights, use square LEDs), a file name in mono (`events.tsx`), and a body. | Used for stats, IDE tabs, terminal. |
+| `Panel` | Terminal chrome: top bar with 3 status dots (not mac traffic lights, use square LEDs), a file name in mono (`events.tsx`), and a body. | Used for stats, terminal. |
 | `Tag` | Mono, pill, 1px border in accent, accent text. | Department, format, stack. |
 | `StatusPill` | LED dot + mono label: `UPCOMING` lime, `LIVE` red with pulse, `PAST` dim, `TBA` warn. | |
 | `EventCartridge` | Card shaped like a game cartridge: notch top-right, label area with cover, mono meta strip (date / venue / format). | Events rail and grid. |

@@ -80,22 +80,9 @@ The server renders the final values. JS only animates from 0 to them, so no-JS a
 
 ---
 
-## 6. "What we do" IDE tabs
+## 6. "What we do" sticky split
 
-A big `Panel` styled as an editor with tabs `hackathons.ts`, `workshops.ts`, `mentorship.ts`, `competitions.ts`. Switching tabs:
-- The tab underline slides (Motion `layoutId`).
-- The editor content types in as syntax-highlighted pseudo-code that's actually the description, e.g.
-  ```ts
-  export const hackathons = {
-    flagship: "Singularity",
-    format: "24h, teams of 2–4",
-    youGet: ["mentors", "prizes", "a demo on stage"],
-  }
-  ```
-- Line numbers count up and a fake cursor follows the typing.
-- Auto-advances every 6s until the user interacts. Pauses on hover/focus.
-
-Keyboard: arrow keys between tabs (ARIA tabs pattern). **off:** content shown instantly.
+Plain CSS `position: sticky`: the title holds on the left while the programs scroll on the right. No JS and no animation, so `full`, `lite` and `off` are identical. Below 860px it stacks and nothing pins.
 
 ---
 

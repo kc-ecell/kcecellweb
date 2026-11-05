@@ -11,9 +11,9 @@ Section-by-section spec. Read it alongside `DESIGN_SYSTEM.md` and `ANIMATIONS.md
 - **XP HUD** bottom-left (`GAMIFICATION.md`).
 - **Terminal** (hidden until triggered).
 - **Footer:**
-  - Full-height, near-black, everything in the accent green. Top rule, then a big statement left and `©26` right.
+  - Full-height, plain near-black (the same `--bg` as the page, no gradient), everything in the accent green. Type matches `.display`. Top rule, then a big statement left (turns white on hover) and `©26` right.
   - Bottom: a one-line prompt, then a full-width "let's talk" bar to `/contact`.
-  - Last line, small mono: `© 2026 E-Cell KCCEMSR_` with the blinking cursor (terminal trigger), page links, socials, privacy and terms.
+  - Last line, small body type: `© 2026 E-Cell KCCEMSR_` with the blinking mono cursor (terminal trigger), page links, socials, privacy and terms.
 - **Masthead pattern** (all inner pages): eyebrow `[03] // EVENTS`, H1 with ScrambleText, a right-aligned mono "readout" aside (counts, ranges), and a hairline below. No hero images on inner pages.
 
 ---
@@ -44,8 +44,8 @@ Data: `site_settings.home.marquee`.
 ### 1.3 Stats `stats.json`
 4 odometer panels: **500+** Active members · **100+** Events and workshops · **20+** Industry partners · **10+** Student-led initiatives. Footer per panel: source + verified month. Data: `stats` (ordered by `sort`).
 
-### 1.4 What we do (IDE tabs)
-Tabs: Hackathons · Workshops & Bootcamps · Mentorship & Incubation · Competitions. Each tab: typed pseudo-code + a real photo thumbnail + "See related events →" (filters `/events?format=`). Copy in `CONTENT.md#programs`.
+### 1.4 What we do (sticky split)
+Title and intro hold on the left while the four programs scroll past on the right: Hackathons · Workshops & Bootcamps · Mentorship & Incubation · Competitions. Below 860px it stacks and nothing pins. Copy in `CONTENT.md#programs`.
 
 ### 1.5 Upcoming events (pinned rail)
 - Title: `[02] // NEXT UP`, counter `01 / 0N`.

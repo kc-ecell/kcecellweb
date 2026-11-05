@@ -114,7 +114,7 @@ Keep to the end regardless (cheap, and they carry the identity): **4.3 scramble 
 | 4.3 | Scramble/decode headlines on every masthead | P0 |
 | 4.4 | Startup-stage scroll progress bar (Idea → Scale) | P0 |
 | 4.5 | Stats odometer + live "terminal readout" panel | P0 |
-| 4.6 | "What we do" IDE tabs with typing code animation | P0 |
+| 4.6 | "What we do" sticky split (title left, programs scroll right) | P0 |
 | 4.7 | Pinned horizontal event rail (event "cartridges") | P0 |
 | 4.8 | Level-map timeline (SVG path draw, node unlock) on Home teaser + About | P0 |
 | 4.9 | Trading cards: 3D tilt, flip, holo sheen (CSS), fan-out deck on Home | P0 |
