@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Bordered card. Borders do the work of shadows. */
+/** Raised card. Depth comes from a soft shadow, not an outline. */
 export function Card({
   className,
   children,
@@ -11,7 +11,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "border-line bg-ink-800 hover:border-line-hi border p-5 transition-colors duration-[var(--dur-fast)]",
+        "bg-ink-800 hover:shadow-card-hover shadow-card p-5 transition-shadow duration-[var(--dur-fast)]",
         className,
       )}
     >

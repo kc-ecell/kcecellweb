@@ -3,12 +3,16 @@ import { Footer } from "@/components/site/Footer";
 import { LenisProvider } from "@/components/motion/LenisProvider";
 import { GamificationLayer } from "@/components/game/GamificationLayer";
 import { PageCritters } from "@/components/game/PageCritters";
+import { BootScreen } from "@/components/site/home/BootScreen";
 
 export default function SiteLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <LenisProvider>
+      {/* Here, not in the home page: template.tsx wraps pages in a transformed
+          element, which would break position: fixed and the stacking order. */}
+      <BootScreen />
       <GamificationLayer>
         <a
           href="#content"

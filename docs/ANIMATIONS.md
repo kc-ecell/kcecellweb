@@ -18,25 +18,19 @@ Testing: `?motion=full|lite|off`.
 
 ## 1. Boot sequence
 
-**Where:** first page load per browser session (`sessionStorage['ecell:booted']`).
-**Duration:** ≤ 1.8s. Skippable with any key, click, or tap. Never shown to crawlers (UA check) or on `off`.
+**Where:** every hit of `/`: first load, reload, and client-side navigation back to the home page. Deep links to other pages go straight to their content.
+**Duration:** ≤ 1.8s including the exit. Skippable with any key, click, or tap, which jumps to the split. Never shown to crawlers (UA check) or on `off`.
 
 **Storyboard**
-1. Black screen. Mono lines type in fast (12ms/char) in the bottom-left:
-   ```
-   > booting ecell.os v26.10
-   > mounting /founders ........ 500+ found
-   > loading /events ........... 100+ ok
-   > linking /partners ......... 20+ ok
-   > status: ready to build_
-   ```
-   (Numbers pulled from the `stats` table at build time.)
-2. The cursor blinks twice. The screen splits horizontally along the last line into two halves that slide up and down (clip-path), revealing the hero underneath.
-3. The hero WebGL starts its morph exactly as the split opens.
+1. White page, no tiles: the logos sit straight on it. `kc-ecell-dark.png` is a copy of the E-Cell logo with dark lettering, because the original's white letters vanish on white. The KC College crest fades in, centred (0–0.25s).
+2. The row slides left to make room for the E-Cell logo (0.25–0.65s).
+3. The E-Cell logo resolves through a stepped 6×6 pixel reveal (0.55–0.95s).
+4. A caption fades in under the E-Cell logo: mono `KCCEMSR, THANE` above `e-cell` (0.85–1.05s). Hold until 1.35s.
+5. The screen splits along a horizontal seam through the logos. The top half slides up, the bottom half slides down, and the logos leave sliced (1.35–1.8s). The hero's entrance starts as the split opens.
 
-**Build:** a server-rendered overlay (so no flash), animated with a GSAP timeline. It removes itself from the DOM after it finishes. LCP is measured on the hero headline **under** the overlay, so the overlay uses `opacity` and `clip-path` only, with no layout changes.
+**Build:** `components/site/home/BootScreen.tsx` is server-rendered and hidden by default. A synchronous script in `<head>` (`lib/motion/boot-gate.ts`) sets `html[data-boot="full|lite"]` before first paint when it should play, so no-JS visitors never see it. `BootController.tsx` calls the same gate (`window.__ecellBoot`) when the route becomes `/`. It animates in CSS keyframes, not GSAP, so it starts before hydration; `BootController.tsx` only handles skipping, hiding and replay. It's mounted in `app/(site)/layout.tsx` because `template.tsx` wraps pages in a transformed element. A CSS failsafe hides it after 3s if JS never hydrates. LCP is measured on the hero **under** the overlay, so the overlay uses `opacity`, `transform` and `clip-path` only, with no layout changes.
 
-**lite:** step 1 at 2× speed, then a fade.  **off:** never shown.
+**lite:** both logos and the caption fade in together, hold, then the same split (about 1.2s).  **off:** never shown.
 
 ---
 

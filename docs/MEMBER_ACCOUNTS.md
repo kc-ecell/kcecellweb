@@ -241,6 +241,6 @@ Step 3 has to finish before real visitors get `login`. Local testing can continu
 
 ## Other cleanup found along the way
 
-- **Mono font:** `public/fonts/ibm-plex-mono-*.woff2` are 4KB subsets with only a few glyphs. The terminal falls back to the system mono font. Replace them with full files.
+- **Mono font:** the terminal uses FK Grotesk Mono. The trial files lack some characters (`@ _ < > $ ~ |`), which fall back to the system mono font until licensed files replace them.
 - **Local dev:** port 3000 is in use by another project, so this site currently runs on 3001, and `NEXT_PUBLIC_SITE_URL` in `.env.local` still says 3000.
 - **Turbopack cache:** if `app/globals.css` changes don't appear in dev, stop the server and delete `.next/dev/cache/turbopack`.

@@ -22,7 +22,7 @@ export default async function WallOfFamePage() {
         {wins.map((win) => (
           <div
             key={win.id}
-            className="border-line bg-surface hover:border-line-strong hover:bg-sunk border p-8 transition-colors"
+            className="bg-surface hover:shadow-card-hover hover:bg-sunk shadow-card p-8 transition-colors"
           >
             <div className="border-line mb-6 flex flex-wrap items-baseline justify-between gap-4 border-b pb-4">
               <span className="text-ink font-mono text-3xl font-light tracking-tight">

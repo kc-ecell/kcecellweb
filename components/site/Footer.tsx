@@ -132,7 +132,7 @@ export function Footer() {
           onClick={() => setLegalModal(null)}
         >
           <div
-            className="border-line bg-surface text-ink w-full max-w-lg border p-6 font-mono shadow-2xl sm:p-8"
+            className="bg-surface text-ink shadow-card w-full max-w-lg p-6 font-mono sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="border-line mb-4 flex items-center justify-between border-b pb-4">

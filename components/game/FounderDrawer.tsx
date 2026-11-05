@@ -77,7 +77,7 @@ export function FounderDrawer() {
           className="flex-1 space-y-6 overflow-y-auto overscroll-contain p-6 font-mono"
         >
           {/* Level Progress Card */}
-          <div className="from-surface to-bg relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br p-5">
+          <div className="from-surface to-bg shadow-card relative overflow-hidden rounded-xl bg-gradient-to-br p-5">
             <div className="mb-3 flex items-center justify-between">
               <div>
                 <span className="block text-[11px] tracking-wider text-neutral-400 uppercase">

@@ -13,9 +13,7 @@ export function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className={cn("corner-ticks border-line bg-ink-800 border", className)}
-    >
+    <div className={cn("corner-ticks bg-ink-800 shadow-card", className)}>
       <div className="border-line flex items-center gap-3 border-b px-3 py-2">
         <span className="flex gap-1.5" aria-hidden="true">
           <span className="bg-line-hi size-2" />

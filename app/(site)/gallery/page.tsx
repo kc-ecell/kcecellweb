@@ -23,7 +23,7 @@ export default async function GalleryPage() {
         {photos.map((photo) => (
           <div
             key={photo.id}
-            className="group border-line bg-surface hover:border-line-strong hover:bg-sunk overflow-hidden border transition-all duration-300"
+            className="group bg-surface hover:shadow-card-hover hover:bg-sunk shadow-card overflow-hidden transition-all duration-300"
           >
             <div className="bg-sunk relative aspect-[4/3] w-full overflow-hidden">
               <Image
