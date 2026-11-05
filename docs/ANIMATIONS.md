@@ -46,7 +46,7 @@ Testing: `?motion=full|lite|off`.
 
 **Build**
 - `components/three/HeroScene.tsx` uses R3F `<Canvas dpr={[1, 1.75]} gl={{ antialias: false, powerPreference: 'high-performance' }}>`.
-- Target positions are sampled from an offscreen 2D canvas rendering "E-CELL" in Unbounded 900. Particles are a `THREE.Points` geometry with a custom `ShaderMaterial`.
+- Target positions are sampled from an offscreen 2D canvas rendering "E-CELL" in FK Grotesk 900. Particles are a `THREE.Points` geometry with a custom `ShaderMaterial`.
 - Vertex shader: `mix(noisePos, targetPos, uProgress)` + curl noise + cursor repulsion (`uMouse`, radius 0.25, falloff smoothstep) + `uScroll` dispersal.
 - Fragment shader: round soft point. Colour is lime for about 8% of particles (seeded), `fg` at 70% for the rest.
 - `uProgress` 0 → 1 over 1.6s `ease-out` after the boot split. `uScroll` is bound to ScrollTrigger progress of the hero (scrub).
@@ -174,7 +174,7 @@ Constant velocity CSS animation (`--ease-linear`), duplicated content with `aria
 
 ## 14. Footer wordmark
 
-A giant `E-CELL` in Unbounded variable. The weight of each letter follows pointer proximity (400 → 900) and letters nudge up slightly. On mobile it reacts to device tilt instead (only if permission was granted for something else; we never prompt just for this), otherwise it stays static.
+Cut. The footer leads with a static statement instead (`PAGES.md` Footer). Its headline and `©26` use `Reveal`; there is no reactive wordmark.
 
 ---
 

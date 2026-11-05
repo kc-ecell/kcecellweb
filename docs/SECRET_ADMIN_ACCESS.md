@@ -8,7 +8,7 @@
 
 ## 1. The ritual
 
-1. Open the terminal (⌘K / backtick / click the footer cursor / long-press the logo on mobile).
+1. Open the terminal (⌘K / backtick / pull the `>_` tab on the left edge / click the footer cursor / long-press the logo on mobile).
 2. Type `sudo login` and press Enter. It doesn't appear in `help` or in tab-completion.
 3. The terminal responds:
    ```

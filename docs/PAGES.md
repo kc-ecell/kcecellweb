@@ -6,14 +6,14 @@ Section-by-section spec. Read it alongside `DESIGN_SYSTEM.md` and `ANIMATIONS.md
 
 - **Navbar** (sticky, `--z-nav`, 64px): logo (`E-CELL` mono wordmark + LED dot) · links `Events · Team · About · Wall of Fame · Gallery · Blog` · `Contact` button (secondary). No login, no admin, no account icon.
   - Scrolling down hides the nav; scrolling up shows it. Gets a background blur-free solid `ink-900` after 40px of scroll.
-  - Mobile: a full-screen menu with links as big Unbounded text that scramble in, socials at the bottom, and the terminal hint `long-press the logo`.
+  - Mobile: a full-screen menu with links as big FK Grotesk text that scramble in, socials at the bottom, and the terminal hint `long-press the logo`.
 - **Stage progress bar** under the nav (`ANIMATIONS.md#4`).
 - **XP HUD** bottom-left (`GAMIFICATION.md`).
 - **Terminal** (hidden until triggered).
 - **Footer:**
-  - Row 1: 4 columns. *Explore* (pages), *Do* (upcoming events: next 3), *Reach us* (email, address KCCEMSR Kopri Thane, reply time), *Follow* (socials as mono labels).
-  - Row 2: giant reactive `E-CELL` wordmark.
-  - Row 3: `© 2026 E-Cell KCCEMSR_` with the blinking cursor (terminal trigger), `Built by the E-Cell Web Dev team`, `v26.10` version tag.
+  - Full-height, near-black, everything in the accent green. Top rule, then a big statement left and `©26` right.
+  - Bottom: a one-line prompt, then a full-width "let's talk" bar to `/contact`.
+  - Last line, small mono: `© 2026 E-Cell KCCEMSR_` with the blinking cursor (terminal trigger), page links, socials, privacy and terms.
 - **Masthead pattern** (all inner pages): eyebrow `[03] // EVENTS`, H1 with ScrambleText, a right-aligned mono "readout" aside (counts, ranges), and a hairline below. No hero images on inner pages.
 
 ---
@@ -26,7 +26,7 @@ Order is chosen so a student and a sponsor both get what they need in one scroll
 - **Full-viewport.** WebGL particle wordmark (poster fallback) fills the right 60% on desktop and sits behind the copy on mobile.
 - Left, bottom-aligned (not centered):
   - Eyebrow: `[00] // ENTREPRENEURSHIP CELL · KCCEMSR, THANE`
-  - H1 (Unbounded 800, `--text-display`), 2 lines. Default, editable in `home.hero`:
+  - H1 (FK Grotesk 800, `--text-display`), 2 lines. Default, editable in `home.hero`:
     ```
     Ideas in.
     Startups out.

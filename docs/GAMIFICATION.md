@@ -101,6 +101,7 @@ A fake shell that's actually a navigation tool, a fact sheet, and the secret doo
 | Trigger | Device |
 |---|---|
 | `Ctrl/⌘ + K` or `` ` `` (backtick) | Keyboard |
+| Dragging or tapping the `>_` tab on the left edge of the screen | Any |
 | Clicking the blinking `_` cursor at the end of the footer line `© E-Cell KCCEMSR_` | Any |
 | Long-press the nav logo for 1.5s | Touch |
 | Typing `help` anywhere on the page (not in an input) | Keyboard |
@@ -108,7 +109,7 @@ A fake shell that's actually a navigation tool, a fact sheet, and the secret doo
 A small `Kbd` hint "Press ⌘K" appears once in the hero's meta row. That's the only public hint.
 
 ### Look
-A `Panel` titled `guest@ecell:~$` that drops down from the top (Quake-console style) over 280ms, 60vh tall on desktop and full-screen on mobile. The input is a real `<input>` with an `aria-label`, and output is a `role="log"` with `aria-live="polite"`. Tab-completion, ↑/↓ history (sessionStorage), and Esc to close.
+A `Panel` titled `guest@ecell:~$` that slides in from the left as a full-height drawer (30rem wide, 92vw on phones) over 280ms (160ms on `lite`, instant on `off`). Dragging its right edge or header left shuts it; a drag past 40% or a flick decides, otherwise it snaps back. The input is a real `<input>` with an `aria-label`, and output is a `role="log"` with `aria-live="polite"`. Tab-completion, ↑/↓ history (sessionStorage), and Esc to close.
 
 ### Public commands (listed by `help`)
 | Command | Output / action |

@@ -34,7 +34,7 @@ Owner column is a suggestion. Reassign freely.
 | # | Task | Pri | Done when |
 |---|---|---|---|
 | 1.1 | Tokens in `app/globals.css` via `@theme` (colours, spacing, radii, z, durations, easings) per `DESIGN_SYSTEM.md` | P0 | No raw hex in components (lint rule) |
-| 1.2 | Fonts via `next/font`: Unbounded (display), Geist (body), Geist Mono (mono), Silkscreen (pixel) | P0 | No FOUT/CLS |
+| 1.2 | Self-hosted fonts: FK Grotesk (primary), Outfit (sub-headings), IBM Plex Mono (mono) | P0 | No FOUT/CLS |
 | 1.3 | Primitives: `Button`, `Link`, `Tag`, `Pill`, `Card` (bordered), `Panel` (terminal chrome), `Section`, `Container`, `Eyebrow`, `Kbd`, `Skeleton`, `EmptyState` | P0 | Storybook-lite page at `/dev/kit` (dev only) |
 | 1.4 | `useMotionTier()` hook + `MotionProvider` (full / lite / off) with `?motion=` override | P0 | Tier visible in dev overlay |
 | 1.5 | Motion primitives: `Reveal`, `RevealGroup`, `ScrambleText`, `CountUp`, `Magnetic`, `Marquee`, `Tilt` | P0 | Each works in all 3 tiers |

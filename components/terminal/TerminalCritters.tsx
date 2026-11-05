@@ -1,6 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useMotionTier } from "@/components/motion/MotionProvider";
+import {
+  HALF,
+  createCritterWorld,
+  hop,
+  releaseVelocity,
+  steer,
+  type CritterBody,
+} from "@/lib/game/critterPhysics";
 import { soundEngine } from "@/lib/game/sound";
 
 // One art pixel = U css pixels; everything snaps to this grid so it stays crisp.
@@ -10,14 +19,9 @@ const BODY_H = 12;
 const DEPTH = 4;
 const LEG_H = 2;
 
-// Physics in css px and seconds.
-const GRAVITY = 1900;
-const MAX_LAUNCH = 3200;
-const BOUNCE = 0.34;
 const TAP_MS = 280;
 
 type Mood = "bars" | "dots" | "happy" | "sleepy" | "wide" | "dizzy";
-type State = "walk" | "idle" | "sleep" | "held" | "air";
 
 interface Palette {
   body: string;
@@ -53,23 +57,13 @@ const SAYINGS = [
   "let him cook",
 ];
 
-interface Critter {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
+interface Critter extends CritterBody {
   tx: number;
   ty: number;
   speed: number;
   theta: number;
   thetaTarget: number;
-  rot: number;
-  rotV: number;
-  lift: number;
-  liftV: number;
-  squash: number;
   step: number;
-  state: State;
   timer: number;
   mood: Mood;
   moodTimer: number;
@@ -105,6 +99,7 @@ export function TerminalCritters({
   onClickBlank?: () => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const tier = useMotionTier();
   const onInteractRef = useRef(onInteract);
   const onClickBlankRef = useRef(onClickBlank);
 
@@ -161,6 +156,10 @@ export function TerminalCritters({
           rotV: 0,
           lift: Math.min(effectiveH * 0.45, 160) + i * 35 + rand(0, 25),
           liftV: 0,
+          squashV: 0,
+          holdX: 0,
+          holdLift: 0,
+          mass: rand(0.85, 1.2),
           squash: 0,
           step: 0,
           state: "air",
@@ -276,16 +275,14 @@ export function TerminalCritters({
 
       if (action === "cheer" || action === "critters") {
         critters.forEach((c) => {
-          c.state = "air";
-          c.liftV = rand(450, 700);
+          hop(c, rand(450, 700));
           c.mood = "happy";
           c.moodTimer = 2.0;
           say(c, pick(SAYINGS), 1.8);
         });
       } else if (action === "pet") {
         const c = pick(critters);
-        c.state = "air";
-        c.liftV = 550;
+        hop(c, 550);
         c.mood = "happy";
         c.moodTimer = 2.5;
         say(c, "♥ purr!", 2.0);
@@ -319,8 +316,6 @@ export function TerminalCritters({
         if (!isDragging && dist > 5) {
           isDragging = true;
           activeCritter.state = "held";
-          activeCritter.rot = 0;
-          activeCritter.rotV = 0;
           activeCritter.mood = "wide";
           activeCritter.moodTimer = 0.5;
         }
@@ -328,17 +323,17 @@ export function TerminalCritters({
         if (isDragging) {
           canvas.style.cursor = "grabbing";
           const b = band();
-          activeCritter.x = clamp(p.x + grabOffsetX, 25, w - 25);
+          activeCritter.holdX = clamp(p.x + grabOffsetX, 25, w - 25);
 
           const groundY = clamp(originalGroundY, b.top, b.bottom);
           const visualY = p.y + grabOffsetY;
 
           if (visualY <= groundY) {
             activeCritter.y = groundY;
-            activeCritter.lift = groundY - visualY;
+            activeCritter.holdLift = groundY - visualY;
           } else {
             activeCritter.y = clamp(visualY, b.top, b.bottom);
-            activeCritter.lift = 0;
+            activeCritter.holdLift = 0;
           }
         }
       } else {
@@ -399,12 +394,8 @@ export function TerminalCritters({
       const isTap = !isDragging && (pressDuration < TAP_MS || moveDistance < 6);
 
       if (isTap) {
-        c.state = "air";
-        c.liftV = 580;
+        hop(c, 580);
         c.vx = rand(-15, 15);
-        c.vy = 0;
-        c.rot = 0;
-        c.rotV = 0;
         c.mood = "happy";
         c.moodTimer = 1.6;
         say(c, wasAsleep ? "!" : pick(SAYINGS));
@@ -412,30 +403,14 @@ export function TerminalCritters({
       } else if (isDragging) {
         history.push({ x: p.x, y: p.y, t: now });
 
-        const recent = history.filter((pt) => now - pt.t <= 120);
-        const pFirst = recent[0] ?? { x: p.x, y: p.y, t: now - 16 };
-        const pLast = recent[recent.length - 1] ?? pFirst;
-        const dt = Math.max(0.016, (pLast.t - pFirst.t) / 1000);
-
-        let vx = clamp((pLast.x - pFirst.x) / dt, -MAX_LAUNCH, MAX_LAUNCH);
-        const vy = clamp((pLast.y - pFirst.y) / dt, -MAX_LAUNCH, MAX_LAUNCH);
-
-        let liftV = -vy;
-        const timeSinceLastMove = now - pLast.t;
-        if (timeSinceLastMove > 70) {
-          vx = 0;
-          liftV = 0;
-        } else if (liftV > 100) {
-          liftV = Math.max(liftV * 1.15, 650);
-        }
-
+        // The pendulum's spin carries through; only the throw comes from the pointer
+        const throwV = releaseVelocity(history, now);
         c.state = "air";
-        c.vx = vx * 0.92;
+        c.vx = throwV.vx;
         c.vy = 0;
-        c.liftV = liftV;
-        c.rotV = clamp(vx / 220, -12, 12);
+        c.liftV = throwV.liftV;
 
-        if (Math.hypot(vx, liftV) > 700) {
+        if (Math.hypot(throwV.vx, throwV.liftV) > 700) {
           c.mood = "wide";
           c.moodTimer = 1.5;
           say(c, pick(["wheee!", "whoa!", "aaah!", "rocket mode!"]), 1.4);
@@ -460,7 +435,6 @@ export function TerminalCritters({
     // ---------------------------------------------------------------- simulation
     const update = (c: Critter, dt: number) => {
       const b = band();
-      c.squash = Math.max(0, c.squash - dt * 4);
       if (c.sayTimer > 0) c.sayTimer -= dt;
       if (c.moodTimer > 0) {
         c.moodTimer -= dt;
@@ -475,69 +449,27 @@ export function TerminalCritters({
 
       if (c.state === "held") {
         c.thetaTarget = 0;
-      } else if (c.state === "air") {
-        c.liftV -= GRAVITY * dt;
-        c.lift += c.liftV * dt;
-        c.x += c.vx * dt;
-        c.rot += c.rotV * dt;
-
-        // Bounce off left/right terminal walls
-        if (c.x < 25 || c.x > w - 25) {
-          c.x = clamp(c.x, 25, w - 25);
-          c.vx *= -0.55;
-          c.rotV *= -0.6;
-        }
-
-        // Ceiling bounce
-        const maxLift = Math.max(0, c.y - 14);
-        if (c.lift > maxLift) {
-          c.lift = maxLift;
-          c.liftV = -Math.abs(c.liftV) * 0.4;
-          c.rotV *= -0.5;
-        }
-
-        // Ground landing
-        if (c.lift <= 0) {
-          const impact = -c.liftV;
-          c.lift = 0;
-          c.squash = clamp(impact / 1200, 0.3, 1);
-          if (impact > 220) {
-            c.liftV = impact * BOUNCE;
-            c.vx *= 0.6;
-            c.rotV *= 0.5;
-          } else {
-            c.state = "idle";
-            c.timer = rand(0.8, 2);
-            c.liftV = 0;
-            c.vx = 0;
-            c.rot = 0;
-            c.rotV = 0;
-          }
-          if (c.entering) {
-            c.entering = false;
-          } else if (impact > 1400) {
-            c.mood = "dizzy";
-            c.moodTimer = 1.8;
-            say(c, pick(["ow", "@_@", "again!"]), 1.4);
-          }
-        }
+      } else if (c.state === "down") {
+        // Knocked over: lie there a moment, then kick back up onto its feet
+        c.timer -= dt;
+        if (c.timer <= 0) hop(c, 380);
       } else if (c.state === "walk") {
         const dx = c.tx - c.x;
         const dy = c.ty - c.y;
         const d = Math.hypot(dx, dy);
         if (d < 4) {
           c.state = "idle";
-          c.vx = c.vy = 0;
           c.timer = rand(1.2, 4);
         } else {
-          c.vx = (dx / d) * c.speed;
-          c.vy = (dy / d) * c.speed * 0.6;
-          c.x += c.vx * dt;
-          c.y = clamp(c.y + c.vy * dt, b.top, b.bottom);
+          // Ease off on the approach instead of stopping dead at the target
+          const pace = c.speed * Math.min(1, d / 40);
+          steer(c, (dx / d) * pace, (dy / d) * pace * 0.6, dt);
+          c.y = clamp(c.y, b.top, b.bottom);
           c.step += dt * 7;
           c.thetaTarget = (c.vx >= 0 ? 1 : -1) * Math.PI * 0.36;
         }
       } else if (c.state === "idle") {
+        steer(c, 0, 0, dt);
         c.thetaTarget = 0;
         c.timer -= dt;
         if (c.timer <= 0) {
@@ -551,6 +483,7 @@ export function TerminalCritters({
           }
         }
       } else if (c.state === "sleep") {
+        steer(c, 0, 0, dt);
         c.thetaTarget = 0;
         c.timer -= dt;
         c.zTimer -= dt;
@@ -566,6 +499,35 @@ export function TerminalCritters({
 
       c.theta += (c.thetaTarget - c.theta) * Math.min(1, dt * 8);
     };
+
+    const world = createCritterWorld<Critter>({
+      collisions: tier === "full",
+      onSettle: (c, upright) => {
+        c.entering = false;
+        c.vy = 0;
+        if (upright) {
+          c.state = "idle";
+          c.timer = rand(0.8, 2);
+        } else {
+          c.state = "down";
+          c.timer = rand(0.7, 1.5);
+          c.mood = "dizzy";
+          c.moodTimer = c.timer + 0.4;
+        }
+      },
+      onImpact: (c, speed) => {
+        if (speed > 1400 && !c.entering) {
+          c.mood = "dizzy";
+          c.moodTimer = 1.8;
+          say(c, pick(["ow", "@_@", "again!"]), 1.4);
+        }
+      },
+      onKnock: (c, speed) => {
+        c.mood = speed > 600 ? "dizzy" : "wide";
+        c.moodTimer = 1.4;
+        say(c, pick(["hey!", "oof", "rude!", "watch it!"]), 1.2);
+      },
+    });
 
     const separate = () => {
       for (let i = 0; i < critters.length; i++) {
@@ -625,18 +587,23 @@ export function TerminalCritters({
       const top = -BODY_H - (sitting ? 0 : LEG_H);
 
       ctx.save();
-      ctx.translate(Math.round(c.x), Math.round(c.y - c.lift));
+      // Spin around the centre of mass; the sprite is drawn up from its feet.
+      ctx.translate(Math.round(c.x), Math.round(c.y - c.lift - HALF));
       if (c.rot) ctx.rotate(c.rot);
+      ctx.translate(0, HALF);
       const sq = c.squash * 0.2 + (sitting ? Math.sin(clock * 2) * 0.03 : 0);
       const st =
         c.state === "air" ? Math.min(0.28, Math.abs(c.liftV) / 7000) : 0;
-      ctx.scale(U * (1 + sq - st * 0.6), U * (1 - sq + st));
+      // Volume stays constant: whatever is lost in height goes to width.
+      const stretch = 1 - sq + st;
+      ctx.scale(U / stretch, U * stretch);
       const px = (x: number, y: number, ww = 1, hh = 1) =>
         ctx.fillRect(x, y, ww, hh);
 
       const moving = c.state === "walk";
       const phase = Math.floor(c.step) % 2;
-      const dangling = c.state === "held" || c.state === "air";
+      const dangling =
+        c.state === "held" || c.state === "air" || c.state === "down";
 
       // Legs
       ctx.fillStyle = outline;
@@ -694,14 +661,14 @@ export function TerminalCritters({
 
       const facingFront = cos > 0.2;
       if (fw >= 5) {
-        ctx.fillStyle = "#090a18";
+        ctx.fillStyle = "#060708";
         for (const d of [2, 4, 6])
           px(fx + Math.round((d / BODY_W) * fw), top + 1);
       }
 
       // Eyes (track pointer)
       if (facingFront && fw >= 4) {
-        ctx.fillStyle = "#090a18";
+        ctx.fillStyle = "#060708";
         const ey = top + 5;
         const narrow = fw < 9;
         const m = eyeMood(c);
@@ -757,7 +724,7 @@ export function TerminalCritters({
       const by = Math.round(c.y - c.lift - (BODY_H + LEG_H) * U - bh - 10);
       const a = Math.min(1, c.sayTimer * 3);
       ctx.globalAlpha = a;
-      ctx.fillStyle = "#0c0d1e";
+      ctx.fillStyle = "#101216";
       ctx.strokeStyle = "#10b981";
       ctx.lineWidth = 1;
 
@@ -810,6 +777,7 @@ export function TerminalCritters({
       clock += dt;
 
       for (const c of critters) update(c, dt);
+      world.step(critters, dt, { left: 25, right: w - 25, top: HALF * 2 + 4 });
       separate();
 
       ctx.clearRect(0, 0, w, h);
@@ -837,7 +805,18 @@ export function TerminalCritters({
       canvas.removeEventListener("pointercancel", onUp);
       canvas.removeEventListener("pointerleave", onLeave);
     };
-  }, [count]);
+  }, [count, tier]);
+
+  // No critters without motion, but blank clicks still have to reach the terminal
+  if (tier === "off") {
+    return (
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-10"
+        onPointerDown={() => onClickBlank?.()}
+      />
+    );
+  }
 
   return (
     <canvas
