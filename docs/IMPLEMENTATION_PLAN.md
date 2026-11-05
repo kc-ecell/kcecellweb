@@ -34,7 +34,7 @@ Owner column is a suggestion. Reassign freely.
 | # | Task | Pri | Done when |
 |---|---|---|---|
 | 1.1 | Tokens in `app/globals.css` via `@theme` (colours, spacing, radii, z, durations, easings) per `DESIGN_SYSTEM.md` | P0 | No raw hex in components (lint rule) |
-| 1.2 | Self-hosted fonts: FK Grotesk (primary), Outfit (sub-headings), IBM Plex Mono (mono) | P0 | No FOUT/CLS |
+| 1.2 | Self-hosted fonts: FK Grotesk (primary), Outfit (sub-headings), FK Grotesk Mono (mono) | P0 | No FOUT/CLS |
 | 1.3 | Primitives: `Button`, `Link`, `Tag`, `Pill`, `Card` (bordered), `Panel` (terminal chrome), `Section`, `Container`, `Eyebrow`, `Kbd`, `Skeleton`, `EmptyState` | P0 | Storybook-lite page at `/dev/kit` (dev only) |
 | 1.4 | `useMotionTier()` hook + `MotionProvider` (full / lite / off) with `?motion=` override | P0 | Tier visible in dev overlay |
 | 1.5 | Motion primitives: `Reveal`, `RevealGroup`, `ScrambleText`, `CountUp`, `Magnetic`, `Marquee`, `Tilt` | P0 | Each works in all 3 tiers |
@@ -114,7 +114,7 @@ Keep to the end regardless (cheap, and they carry the identity): **4.3 scramble 
 | 4.3 | Scramble/decode headlines on every masthead | P0 |
 | 4.4 | Startup-stage scroll progress bar (Idea → Scale) | P0 |
 | 4.5 | Stats odometer + live "terminal readout" panel | P0 |
-| 4.6 | "What we do" IDE tabs with typing code animation | P0 |
+| 4.6 | "What we do" sticky split (title left, programs scroll right) | P0 |
 | 4.7 | Pinned horizontal event rail (event "cartridges") | P0 |
 | 4.8 | Level-map timeline (SVG path draw, node unlock) on Home teaser + About | P0 |
 | 4.9 | Trading cards: 3D tilt, flip, holo sheen (CSS), fan-out deck on Home | P0 |

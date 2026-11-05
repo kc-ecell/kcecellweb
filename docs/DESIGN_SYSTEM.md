@@ -89,11 +89,11 @@ Dark is the canonical theme for the public site.
 
 | Role | Family | Use |
 |---|---|---|
-| Primary | **FK Grotesk** (licensed, files pending) | Headlines, big numbers, wordmark, paragraphs, UI |
+| Primary | **FK Grotesk** (trial files: buy a licence before launch; they lack `@ & + % $ # _ < > © ·` and arrows, which fall back to Open Sauce Sans) | Headlines, big numbers, wordmark, paragraphs, UI |
 | Sub | **Outfit** (variable, 100–900) | Sub-headings (`h3`–`h6`, `.subheading`) |
-| Mono | **IBM Plex Mono** | Eyebrows, labels, meta, code, terminal, stats |
+| Mono | **FK Grotesk Mono** (same trial limits; missing characters fall back to the system monospace) | Eyebrows, labels, meta, code, terminal, stats |
 
-Self-hosted from `public/fonts` with `@font-face` in `app/globals.css`, `font-display: swap`. Tokens: `--font-display`, `--font-heading`, `--font-body`, `--font-subheading`, `--font-mono`. Open Sauce Sans is the fallback in the FK Grotesk stacks until the licensed files are added.
+Self-hosted from `public/fonts` with `@font-face` in `app/globals.css`, `font-display: swap`. Tokens: `--font-display`, `--font-heading`, `--font-body`, `--font-subheading`, `--font-mono`. Open Sauce Sans (500–700) stays in the FK Grotesk stacks to catch characters the trial files lack.
 
 ### Scale (fluid, clamp)
 ```css
@@ -123,7 +123,7 @@ Measure: body text max `68ch`.
 - Container: 12 columns, max 1440px, gutters `clamp(1rem, 3vw, 2rem)`, side margin 16px minimum on mobile.
 - **Background grid:** a 64px CSS grid of `--color-line` at 40% opacity, masked with a radial fade. It's pure CSS and every section shares it.
 - Radii: `--radius-0: 0` (default for panels and tables), `--radius-sm: 6px` (buttons, inputs), `--radius-md: 14px` (trading cards), `--radius-pill: 999px` (tags).
-- Borders do the work of shadows. 1px `--color-line`; on hover, `--color-line-hi`; when active, lime.
+- Boxes get depth from a soft shadow, not an outline: `--shadow-card`, and `--shadow-card-hover` on hover. Near-black swallows a dark shadow, so these pair it with a faint light glow underneath. Lines stay for dividers (1px `--color-line`), form inputs, tags, secondary buttons, and coloured state borders.
 - Corner ticks: panels can carry 8px L-shaped corner marks (`::before/::after`). That's the signature detail.
 
 ### Z-index tokens
@@ -136,7 +136,7 @@ Measure: body text max `68ch`.
 | Component | Anatomy | Notes |
 |---|---|---|
 | `Button` | Primary: lime fill, `lime-ink` text, mono label, 48px tall, `radius-sm`. Secondary: 1px line border, fg text. Ghost: text + arrow. | Primary is magnetic on `full`. Label = verb + object ("See upcoming events"). |
-| `Panel` | Terminal chrome: top bar with 3 status dots (not mac traffic lights, use square LEDs), a file name in mono (`events.tsx`), and a body. | Used for stats, IDE tabs, terminal. |
+| `Panel` | Terminal chrome: top bar with 3 status dots (not mac traffic lights, use square LEDs), a file name in mono (`events.tsx`), and a body. | Used for stats, terminal. |
 | `Tag` | Mono, pill, 1px border in accent, accent text. | Department, format, stack. |
 | `StatusPill` | LED dot + mono label: `UPCOMING` lime, `LIVE` red with pulse, `PAST` dim, `TBA` warn. | |
 | `EventCartridge` | Card shaped like a game cartridge: notch top-right, label area with cover, mono meta strip (date / venue / format). | Events rail and grid. |

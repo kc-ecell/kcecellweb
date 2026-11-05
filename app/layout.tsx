@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { BOOT_GATE_SCRIPT } from "@/lib/motion/boot-gate";
 
 const SITE_TITLE = "e-cell · kccemsr, thane.";
 const SITE_DESCRIPTION =
@@ -36,7 +37,11 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className="min-h-full antialiased">
+    // suppressHydrationWarning: the boot gate sets data-boot before hydration.
+    <html lang="en" className="min-h-full antialiased" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: BOOT_GATE_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <MotionProvider>{children}</MotionProvider>
         {DevTools && <DevTools />}

@@ -31,7 +31,7 @@ export function Footer() {
   );
 
   return (
-    <footer className="footer-beams bg-bg text-accent relative isolate flex min-h-svh w-full flex-col overflow-hidden px-4 pt-24 pb-20 md:px-6">
+    <footer className="bg-bg text-accent relative isolate flex min-h-svh w-full flex-col overflow-hidden px-4 pt-24 pb-20 md:px-6">
       <div className="bg-accent h-1 w-full" />
 
       <div className="mt-5 flex flex-col gap-8 md:mt-7 md:flex-row md:items-start md:justify-between">
@@ -72,13 +72,13 @@ export function Footer() {
           </svg>
         </Link>
 
-        <div className="footer-links text-ink-2 mt-5 flex flex-col gap-3 font-mono text-xs lg:flex-row lg:items-center lg:justify-between">
+        <div className="footer-links text-ink-2 mt-5 flex flex-col gap-3 text-xs lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-1">
             <span>© 2026 E-Cell KCCEMSR</span>
             <button
               type="button"
               onClick={() => setTerminalOpen(!terminalOpen)}
-              className="text-accent hover:text-ink cursor-pointer p-1 font-bold motion-safe:animate-pulse"
+              className="text-accent hover:text-ink cursor-pointer p-1 font-mono font-bold motion-safe:animate-pulse"
               title="Launch ecell.sh terminal (~ or Ctrl+K)"
               aria-label="Launch ecell.sh terminal"
             >
@@ -132,7 +132,7 @@ export function Footer() {
           onClick={() => setLegalModal(null)}
         >
           <div
-            className="border-line bg-surface text-ink w-full max-w-lg border p-6 font-mono shadow-2xl sm:p-8"
+            className="bg-surface text-ink shadow-card w-full max-w-lg p-6 sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="border-line mb-4 flex items-center justify-between border-b pb-4">

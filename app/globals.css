@@ -2,32 +2,86 @@
 
 /* Self-hosted Typography */
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("/fonts/ibm-plex-mono-400.woff2") format("woff2");
+  font-family: "FK Grotesk";
+  src: url("/fonts/fk-grotesk-300.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FK Grotesk";
+  src: url("/fonts/fk-grotesk-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("/fonts/ibm-plex-mono-500.woff2") format("woff2");
+  font-family: "FK Grotesk";
+  src: url("/fonts/fk-grotesk-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FK Grotesk";
+  src: url("/fonts/fk-grotesk-500.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("/fonts/ibm-plex-mono-600.woff2") format("woff2");
-  font-weight: 600;
+  font-family: "FK Grotesk";
+  src: url("/fonts/fk-grotesk-700.woff2") format("woff2");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-/* FK Grotesk is a licensed font and its files aren't in the repo yet. Once they
-   are in public/fonts, add its @font-face rules here. Until then every stack
-   that names it falls through to Open Sauce Sans. */
+@font-face {
+  font-family: "FK Grotesk";
+  src: url("/fonts/fk-grotesk-900.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FK Grotesk Mono";
+  src: url("/fonts/fk-grotesk-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FK Grotesk Mono";
+  src: url("/fonts/fk-grotesk-mono-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FK Grotesk Mono";
+  src: url("/fonts/fk-grotesk-mono-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FK Grotesk Mono";
+  src: url("/fonts/fk-grotesk-mono-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Open Sauce Sans only catches characters the FK Grotesk trial lacks (@ & + © and so on) */
 
 @font-face {
   font-family: "Outfit";
@@ -40,14 +94,6 @@
 @font-face {
   font-family: "Peace Sans";
   src: url("/fonts/peace-sans.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Open Sauce Sans";
-  src: url("/fonts/open-sauce-sans-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -96,6 +142,13 @@
   --color-accent-soft: rgb(22 168 90 / 0.22);
   --color-on-accent: #061008;
 
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.05), 0 2px 8px rgb(0 0 0 / 0.5),
+    0 20px 44px -18px rgb(255 255 255 / 0.1);
+  --shadow-card-hover:
+    inset 0 1px 0 rgb(255 255 255 / 0.08), 0 4px 12px rgb(0 0 0 / 0.55),
+    0 28px 56px -18px rgb(255 255 255 / 0.16);
+
   --color-ok: #2ad184;
   --color-warn: #f5b745;
   --color-info: #80aaff;
@@ -119,7 +172,7 @@
   --font-heading: "FK Grotesk", "Open Sauce Sans", sans-serif;
   --font-subheading: "Outfit", sans-serif;
   --font-body: "FK Grotesk", "Open Sauce Sans", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --font-mono: "FK Grotesk Mono", ui-monospace, "SF Mono", monospace;
   --font-sans: "FK Grotesk", "Open Sauce Sans", sans-serif;
 }
 
@@ -147,7 +200,7 @@
   --display: "FK Grotesk", "Open Sauce Sans", sans-serif;
   --heading: "FK Grotesk", "Open Sauce Sans", sans-serif;
   --subheading: "Outfit", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --mono: "FK Grotesk Mono", ui-monospace, "SF Mono", monospace;
 
   --measure: 680px;
   --wide: 1200px;
@@ -157,6 +210,7 @@
   --z-nav: 50;
   --z-overlay: 80;
   --z-terminal: 90;
+  --z-boot: 110;
 
   color-scheme: dark;
 }
@@ -506,6 +560,15 @@ h6,
   animation: hero-settle 1600ms var(--ease) both;
 }
 
+/* The hero's entrance starts as the boot screen splits open, not behind it */
+html[data-boot] .hero-media img {
+  animation-delay: var(--boot-split-at);
+}
+
+html[data-boot-skip] .hero-media img {
+  animation-delay: 0s;
+}
+
 @keyframes hero-settle {
   from {
     transform: scale(1.06);
@@ -793,33 +856,51 @@ h6,
   grid-column: 2;
 }
 
-/* What we do — four programs, editorial rules instead of boxed cards
-   so they don't read as a second copy of the timeline grid below. */
-.program-grid {
+/* What we do: the title holds on the left while the programs scroll past on
+   the right. Plain position: sticky, so every motion tier gets the same thing.
+   Each program is tall enough that the list outruns the title. */
+.programs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 32px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: 32px clamp(32px, 6vw, 96px);
+  align-items: start;
+  margin-top: clamp(72px, 10vw, 128px);
+}
+
+.programs-head {
+  position: sticky;
+  top: 120px;
+}
+
+.programs-head h2 {
+  font-size: clamp(2.5rem, 6.4vw, 4.75rem);
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+}
+
+.programs-head p {
+  margin: 20px 0 0;
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.program-list {
   border-top: 1px solid var(--line);
 }
 
 .program {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(280px, 56svh, 480px);
   padding: clamp(28px, 3.2vw, 48px) 0;
   border-bottom: 1px solid var(--line);
-}
-
-.program:nth-child(odd) {
-  padding-right: clamp(24px, 4vw, 72px);
-  border-right: 1px solid var(--line);
-}
-
-.program:nth-child(even) {
-  padding-left: clamp(24px, 4vw, 72px);
 }
 
 .program h3 {
   font-family: var(--subheading);
   font-weight: 600;
-  font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
   letter-spacing: -0.02em;
   line-height: 1.1;
   margin: 0 0 14px;
@@ -829,20 +910,20 @@ h6,
   margin: 0;
   color: var(--ink-2);
   max-width: 46ch;
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   line-height: 1.5;
 }
 
-@media (max-width: 720px) {
-  .program-grid {
+/* Stacked, a pinned title would only cover the content under it */
+@media (max-width: 860px) {
+  .programs {
     grid-template-columns: 1fr;
   }
-  .program:nth-child(odd) {
-    padding-right: 0;
-    border-right: none;
+  .programs-head {
+    position: static;
   }
-  .program:nth-child(even) {
-    padding-left: 0;
+  .program {
+    min-height: 0;
   }
 }
 
@@ -855,19 +936,19 @@ h6,
 }
 
 .timeline-card {
-  border: 1px solid var(--line);
   background: var(--surface);
+  box-shadow: var(--shadow-card);
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   transition:
-    border-color 200ms ease,
+    box-shadow 200ms ease,
     background-color 200ms ease;
 }
 
 .timeline-card:hover {
-  border-color: var(--line-strong);
+  box-shadow: var(--shadow-card-hover);
   background: var(--sunk);
 }
 
@@ -929,18 +1010,18 @@ h6,
 }
 
 .team-card {
-  border: 1px solid var(--line);
   background: var(--surface);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition:
-    border-color 200ms ease,
+    box-shadow 200ms ease,
     transform 200ms ease;
 }
 
 .team-card:hover {
-  border-color: var(--accent);
+  box-shadow: var(--shadow-card-hover);
   transform: translateY(-2px);
 }
 
@@ -1101,26 +1182,6 @@ h6,
 }
 
 /* Footer */
-/* Footer: big statement over faint diagonal light, all in the one accent */
-.footer-beams {
-  background-image:
-    linear-gradient(
-      128deg,
-      transparent 38%,
-      rgb(22 168 90 / 0.07) 44%,
-      transparent 47%,
-      transparent 52%,
-      rgb(22 168 90 / 0.04) 56%,
-      transparent 62%
-    ),
-    linear-gradient(
-      52deg,
-      transparent 58%,
-      rgb(255 255 255 / 0.03) 66%,
-      transparent 74%
-    );
-}
-
 /* Plain CSS, not utilities: the global `a { color: inherit }` rule is unlayered,
    so it beats Tailwind's text colour classes on links. */
 .footer-bar {
@@ -1137,17 +1198,26 @@ h6,
   color: var(--ink);
 }
 
+/* Same cut as .display, only larger */
 .footer-statement,
 .footer-year {
   font-family: var(--display);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
   margin: 0;
 }
 
 .footer-statement {
   font-size: clamp(3.25rem, 9.5vw, 10rem);
+  transition: color 160ms var(--ease);
+}
+
+/* Hover devices only, so a tap can't leave it stuck white */
+@media (hover: hover) {
+  .footer-statement:hover {
+    color: var(--ink);
+  }
 }
 
 .footer-year {
@@ -1158,8 +1228,8 @@ h6,
 .footer-prompt {
   font-family: var(--display);
   font-size: clamp(1.25rem, 2.4vw, 2.5rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-weight: 400;
+  letter-spacing: -0.015em;
   line-height: 1.1;
   margin: 0;
 }
@@ -1167,8 +1237,8 @@ h6,
 .footer-cta {
   font-family: var(--display);
   font-size: clamp(1.25rem, 2.2vw, 2.25rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 400;
+  letter-spacing: -0.015em;
   line-height: 1;
 }
 
@@ -1539,5 +1609,229 @@ html[data-retro-arcade="true"] {
   }
   .animate-ping {
     animation: none;
+  }
+}
+
+/* Boot screen: docs/ANIMATIONS.md §1. Hidden unless lib/motion/boot-gate.ts
+   sets html[data-boot]. Animates opacity, transform and clip-path only, so the
+   hero stays the LCP element underneath. */
+html[data-boot] {
+  --boot-page: #ffffff;
+  --boot-ink: var(--bg);
+  --boot-ink-2: rgb(6 7 8 / 0.6);
+}
+
+html[data-boot="full"] {
+  --boot-logo-fade: 250ms;
+  --boot-wipe-at: 250ms;
+  --boot-wipe: 400ms;
+  --boot-pixel-at: 550ms;
+  --boot-pixel-step: 11ms;
+  --boot-caption-at: 850ms;
+  --boot-caption-fade: 200ms;
+  --boot-split-at: 1350ms;
+  --boot-split: 450ms;
+}
+
+html[data-boot="lite"] {
+  --boot-logo-fade: 250ms;
+  --boot-caption-at: 0ms;
+  --boot-caption-fade: 250ms;
+  --boot-split-at: 750ms;
+  --boot-split: 450ms;
+}
+
+.boot {
+  display: none;
+}
+
+html[data-boot] .boot {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-boot);
+  /* Failsafe: nobody stays stuck behind this if JS never hydrates */
+  animation: boot-failsafe 1ms linear 3s forwards;
+}
+
+.boot-half {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--boot-page);
+}
+
+/* The 1px overlap stops a hairline of hero showing along the seam */
+.boot-half--top {
+  clip-path: inset(0 0 calc(50% - 1px) 0);
+  animation: boot-split-up var(--boot-split) var(--ease) var(--boot-split-at)
+    forwards;
+}
+
+.boot-half--bottom {
+  clip-path: inset(50% 0 0 0);
+  animation: boot-split-down var(--boot-split) var(--ease) var(--boot-split-at)
+    forwards;
+}
+
+html[data-boot-skip] .boot-half--top {
+  animation-name: boot-split-up-skip;
+  animation-delay: 0s;
+}
+
+html[data-boot-skip] .boot-half--bottom {
+  animation-name: boot-split-down-skip;
+  animation-delay: 0s;
+}
+
+.boot-row {
+  --boot-logo: clamp(120px, 34vw, 176px);
+  --boot-gap: clamp(24px, 6vw, 48px);
+  display: flex;
+  gap: var(--boot-gap);
+}
+
+html[data-boot="full"] .boot-row {
+  animation: boot-row-settle var(--boot-wipe) var(--ease) var(--boot-wipe-at)
+    both;
+}
+
+.boot-slot {
+  position: relative;
+}
+
+.boot-logo {
+  position: relative;
+  width: var(--boot-logo);
+  height: var(--boot-logo);
+}
+
+.boot-logo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.boot-logo--crest {
+  animation: boot-fade var(--boot-logo-fade) linear both;
+}
+
+html[data-boot="full"] .boot-logo--ecell {
+  animation: boot-wipe var(--boot-wipe) var(--ease) var(--boot-wipe-at) both;
+}
+
+html[data-boot="lite"] .boot-logo--ecell {
+  animation: boot-fade var(--boot-logo-fade) linear both;
+}
+
+.boot-pixels {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template: repeat(6, 1fr) / repeat(6, 1fr);
+}
+
+html[data-boot="lite"] .boot-pixels {
+  display: none;
+}
+
+.boot-pixels span {
+  background: var(--boot-page);
+  outline: 1px solid var(--boot-page);
+  animation: boot-pixel 1ms linear forwards;
+  animation-delay: calc(
+    var(--boot-pixel-at) + var(--i) * var(--boot-pixel-step)
+  );
+}
+
+.boot-caption {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+  right: 0;
+  color: var(--boot-ink);
+  font-size: 1rem;
+  text-align: center;
+  animation: boot-fade var(--boot-caption-fade) linear var(--boot-caption-at)
+    both;
+}
+
+.boot-caption span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--boot-ink-2);
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+}
+
+@keyframes boot-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes boot-row-settle {
+  from {
+    transform: translateX(calc((var(--boot-logo) + var(--boot-gap)) / 2));
+  }
+}
+
+@keyframes boot-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes boot-pixel {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes boot-split-up {
+  to {
+    transform: translateY(-51%);
+  }
+}
+
+@keyframes boot-split-down {
+  to {
+    transform: translateY(51%);
+  }
+}
+
+/* Separate names so skipping restarts the exit instead of seeking into it */
+@keyframes boot-split-up-skip {
+  to {
+    transform: translateY(-51%);
+  }
+}
+
+@keyframes boot-split-down-skip {
+  to {
+    transform: translateY(51%);
+  }
+}
+
+@keyframes boot-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+
+html[data-boot-done] .boot {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-boot] .boot {
+    display: none;
   }
 }

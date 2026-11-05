@@ -28,7 +28,7 @@ export default function ContactPage() {
 
       <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1fr_360px]">
         {/* Contact Form */}
-        <div className="border-line bg-surface border p-8 md:p-10">
+        <div className="bg-surface shadow-card p-8 md:p-10">
           {submitted ? (
             <div className="py-12 text-center">
               <span className="tag t-open mb-4">
@@ -132,7 +132,7 @@ export default function ContactPage() {
 
         {/* Info Sidebar */}
         <div className="flex flex-col gap-8">
-          <div className="border-line bg-surface border p-6">
+          <div className="bg-surface shadow-card p-6">
             <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
               direct email
             </h3>
@@ -147,7 +147,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="border-line bg-surface border p-6">
+          <div className="bg-surface shadow-card p-6">
             <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
               campus location
             </h3>
@@ -159,7 +159,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="border-line bg-surface border p-6">
+          <div className="bg-surface shadow-card p-6">
             <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
               social links
             </h3>

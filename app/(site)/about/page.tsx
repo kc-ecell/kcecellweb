@@ -23,7 +23,7 @@ export default async function AboutPage() {
 
       {/* Mission & Vision */}
       <div className="my-16 grid gap-8 md:grid-cols-2">
-        <div className="border-line bg-surface border p-8">
+        <div className="bg-surface shadow-card p-8">
           <span className="tag t-hackathon mb-3">
             <span className="dot" />
             our mission
@@ -39,7 +39,7 @@ export default async function AboutPage() {
           </p>
         </div>
 
-        <div className="border-line bg-surface border p-8">
+        <div className="bg-surface shadow-card p-8">
           <span className="tag t-workshop mb-3">
             <span className="dot" />
             our vision
@@ -85,7 +85,7 @@ export default async function AboutPage() {
       </div>
 
       {/* Faculty and College details */}
-      <div className="border-line bg-surface mt-24 border p-8 md:p-12">
+      <div className="bg-surface shadow-card mt-24 p-8 md:p-12">
         <div className="max-w-2xl">
           <p className="eyebrow mb-2">institution & leadership</p>
           <h2 className="text-ink mb-4 text-3xl font-normal tracking-tight">
