@@ -49,7 +49,7 @@ export function TerminalDiscoveryToast() {
       aria-label="Secret terminal discovery prompt"
       className="animate-in slide-in-from-top-4 fade-in pointer-events-auto fixed right-5 bottom-20 z-[54] w-[calc(100vw-2.5rem)] max-w-sm duration-300 sm:max-w-md md:top-24 md:bottom-auto"
     >
-      <div className="relative overflow-hidden rounded-xl border border-emerald-500/40 bg-[#090a18]/95 p-4 font-mono text-neutral-200 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-md">
+      <div className="bg-bg/95 relative overflow-hidden rounded-xl border border-emerald-500/40 p-4 font-mono text-neutral-200 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-md">
         {/* Subtle accent border line */}
         <div className="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-emerald-500 via-teal-400 to-transparent" />
 
@@ -75,7 +75,7 @@ export function TerminalDiscoveryToast() {
         </div>
 
         <p className="mb-3 text-xs leading-relaxed text-neutral-300">
-          This site has a built-in Quake console (
+          This site has a built-in console (
           <span className="font-semibold text-emerald-400">ecell.sh</span>)
           loaded with hidden commands, easter eggs, matrix rain, and founder
           perks.

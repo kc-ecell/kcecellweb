@@ -7,6 +7,7 @@ import { useFounder } from "@/lib/game/FounderContext";
 import { soundEngine } from "@/lib/game/sound";
 import { MatrixRain } from "./MatrixRain";
 import { TerminalCritters } from "./TerminalCritters";
+import { useTerminalDrawer } from "./useTerminalDrawer";
 
 interface LogEntry {
   id: string;
@@ -55,6 +56,16 @@ export function Terminal() {
     setPref,
     setDrawerOpen,
   } = useFounder();
+  const {
+    tier,
+    panelRef,
+    backdropRef,
+    pulling,
+    rendered,
+    leaving,
+    tabProps,
+    closeDragProps,
+  } = useTerminalDrawer(terminalOpen, setTerminalOpen);
 
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
@@ -320,9 +331,7 @@ export function Terminal() {
           "  hire                View engineering & designer recruitment info",
         );
         addLog("  clear               Clear all terminal console logs");
-        addLog(
-          "  exit                Close the dropdown console (or press Esc / `)",
-        );
+        addLog("  exit                Close the console (or press Esc / `)");
         break;
 
       case "whoami":
@@ -723,10 +732,25 @@ export function Terminal() {
     }
   };
 
-  if (!terminalOpen) return null;
+  // Pull tab on the left edge: drag it out, or tap / press Enter to open.
+  const tab = !terminalOpen && (
+    <button
+      type="button"
+      {...tabProps}
+      aria-label="Open terminal"
+      className={`bg-bg fixed top-1/2 left-0 z-[55] flex h-20 w-7 -translate-y-1/2 cursor-grab touch-none items-center justify-center rounded-r-md border border-l-0 border-emerald-500/50 font-mono text-xs font-bold text-emerald-400 shadow-xl select-none active:cursor-grabbing ${
+        pulling ? "opacity-0" : ""
+      }`}
+    >
+      &gt;_
+    </button>
+  );
+
+  if (!rendered) return tab;
 
   return (
     <>
+      {tab}
       {matrixActive && <MatrixRain onComplete={() => setMatrixActive(false)} />}
 
       {/* Fake panic glitch modal for rm -rf / */}
@@ -745,20 +769,39 @@ export function Terminal() {
 
       {/* Dimmed backdrop */}
       <div
-        className="animate-in fade-in fixed inset-0 z-[64] bg-black/60 backdrop-blur-sm duration-200"
+        ref={backdropRef}
+        data-tier={tier}
+        data-leaving={leaving || undefined}
+        className="terminal-backdrop fixed inset-0 z-[64] bg-black/60 backdrop-blur-sm"
         onClick={() => setTerminalOpen(false)}
         aria-hidden="true"
       />
 
-      {/* Quake Dropdown Console */}
+      {/* Left Drawer Console */}
       <section
+        ref={panelRef}
+        data-tier={tier}
+        data-leaving={leaving || undefined}
+        data-lenis-prevent
         role="dialog"
         aria-label="Interactive Terminal Console"
         aria-modal="true"
-        className="animate-in slide-in-from-top fixed inset-x-0 top-0 z-[65] flex max-h-[75vh] flex-col overflow-hidden border-b border-emerald-500/40 bg-[#070814]/95 font-mono text-xs text-neutral-200 shadow-2xl backdrop-blur-xl duration-300 select-text sm:max-h-[62vh] sm:text-sm"
+        className="terminal-drawer bg-bg/95 fixed inset-y-0 left-0 z-[65] flex h-dvh w-[min(92vw,30rem)] flex-col overflow-hidden border-r border-emerald-500/40 pr-3 font-mono text-xs text-neutral-200 shadow-2xl backdrop-blur-xl select-text sm:text-sm"
       >
+        {/* Drag this edge, or the header, left to shut the drawer */}
+        <div
+          {...closeDragProps}
+          aria-hidden="true"
+          className="absolute inset-y-0 right-0 z-40 flex w-3 cursor-ew-resize touch-none items-center justify-center"
+        >
+          <span className="h-12 w-1 rounded-full bg-emerald-500/50" />
+        </div>
+
         {/* Terminal Header Bar */}
-        <div className="relative z-30 flex items-center justify-between border-b border-white/10 bg-[#05060f] px-4 py-2 select-none">
+        <div
+          {...closeDragProps}
+          className="bg-bg relative z-30 flex cursor-grab touch-none items-center justify-between border-b border-white/10 px-4 py-2 select-none active:cursor-grabbing"
+        >
           <div className="flex items-center gap-2">
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-emerald-500" />
             <span className="text-xs font-bold tracking-wider text-neutral-400 uppercase">
@@ -767,11 +810,9 @@ export function Terminal() {
           </div>
 
           <div className="flex items-center gap-3 text-xs text-neutral-400">
-            <span className="hidden text-[11px] opacity-75 sm:inline">
-              Press{" "}
-              <kbd className="rounded bg-white/10 px-1 text-white">Esc</kbd> or
-              type &apos;exit&apos;
-            </span>
+            <kbd className="hidden rounded bg-white/10 px-1 text-[11px] text-white sm:inline">
+              Esc
+            </kbd>
             <button
               type="button"
               onClick={() => setTerminalOpen(false)}
@@ -826,7 +867,7 @@ export function Terminal() {
         {/* Command Input Row */}
         <form
           onSubmit={handleSubmit}
-          className="relative z-30 flex items-center gap-2 border-t border-white/10 bg-[#04050d] px-4 py-3"
+          className="bg-bg relative z-30 flex items-center gap-2 border-t border-white/10 px-4 py-3"
         >
           <span className="shrink-0 font-bold text-emerald-400 select-none">
             {loginStep === "awaiting_email"

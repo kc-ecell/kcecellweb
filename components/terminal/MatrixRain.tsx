@@ -23,7 +23,7 @@ export function MatrixRain({ onComplete }: { onComplete: () => void }) {
     );
 
     const draw = () => {
-      ctx.fillStyle = "rgba(9, 10, 26, 0.08)";
+      ctx.fillStyle = "rgba(6, 7, 8, 0.08)";
       ctx.fillRect(0, 0, width, height);
 
       ctx.fillStyle = "#10b981";

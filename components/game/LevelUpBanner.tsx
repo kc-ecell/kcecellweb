@@ -12,7 +12,7 @@ export function LevelUpBanner() {
       aria-label="Level Up announcement"
       className="animate-in slide-in-from-top-4 fade-in pointer-events-none fixed inset-x-0 top-16 z-[58] flex justify-center px-4 duration-300"
     >
-      <div className="pointer-events-auto relative flex w-full max-w-xl items-center justify-between gap-4 overflow-hidden rounded-xl border-2 border-emerald-400 bg-[#0b0c1e]/95 p-4 shadow-[0_0_50px_rgba(16,185,129,0.3)] backdrop-blur-lg sm:p-5">
+      <div className="bg-bg/95 pointer-events-auto relative flex w-full max-w-xl items-center justify-between gap-4 overflow-hidden rounded-xl border-2 border-emerald-400 p-4 shadow-[0_0_50px_rgba(16,185,129,0.3)] backdrop-blur-lg sm:p-5">
         {/* Subtle pixel particle confetti accents */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-30">
           <div className="absolute -top-2 left-1/4 h-3 w-3 rotate-12 animate-bounce bg-emerald-400" />

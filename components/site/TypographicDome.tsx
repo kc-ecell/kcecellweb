@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useMotionTier } from "@/components/motion/MotionProvider";
 
 const CREAM_BG = "#edece6";
-const DARK_BG = "#090a1a";
+const DARK_BG = "#060708";
 
 // Text sequences for the concentric celestial dome arcs
 const ARC_TEXTS = [

@@ -45,7 +45,7 @@ export function FounderHUD() {
         className={`group flex cursor-pointer items-center gap-3 rounded-full border px-3.5 py-2 font-mono text-xs tracking-wide shadow-xl backdrop-blur-md transition-all duration-300 select-none active:scale-95 ${
           isUnicorn
             ? "border-emerald-400/50 bg-gradient-to-r from-emerald-950/80 via-teal-900/80 to-purple-950/80 text-emerald-300 shadow-emerald-500/20"
-            : "border-white/15 bg-[#090a1a]/90 text-neutral-200 hover:border-emerald-500/50 hover:bg-[#0e1026]"
+            : "bg-bg/90 hover:bg-surface border-white/15 text-neutral-200 hover:border-emerald-500/50"
         }`}
         title="Founder XP · Click to view badges and progress"
       >

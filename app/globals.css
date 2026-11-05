@@ -25,18 +25,14 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/fraunces-600.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
+/* FK Grotesk is a licensed font and its files aren't in the repo yet. Once they
+   are in public/fonts, add its @font-face rules here. Until then every stack
+   that names it falls through to Open Sauce Sans. */
 
 @font-face {
-  font-family: "Poppins";
-  src: url("/fonts/poppins-600.woff2") format("woff2");
-  font-weight: 600;
+  font-family: "Outfit";
+  src: url("/fonts/outfit-variable.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -82,23 +78,23 @@
 }
 
 /* ============================================================
-   The Midnight Indigo & Vanilla Design System
-   Superfamily: Open Sauce Sans (content) + Peace Sans (display headers)
-   Palette: Deep Midnight Indigo (#090a1a) & Creamy Vanilla (#f8f3e3)
+   The Ink & Forge Green Design System
+   Type: FK Grotesk (headings + content) + Outfit (sub-headings)
+   Palette: near-black ink (#060708), white text, one green (#16a85a)
    ============================================================ */
 
 @theme {
-  --color-bg: #090a1a;
-  --color-surface: #12132e;
-  --color-sunk: #1a1c3d;
-  --color-ink: #f8f3e3;
-  --color-ink-2: rgb(248 243 227 / 0.74);
-  --color-muted: rgb(248 243 227 / 0.44);
-  --color-line: rgb(248 243 227 / 0.12);
-  --color-line-strong: rgb(248 243 227 / 0.28);
-  --color-accent: #f3d489;
-  --color-accent-soft: rgb(243 212 137 / 0.22);
-  --color-on-accent: #090a1a;
+  --color-bg: #060708;
+  --color-surface: #101216;
+  --color-sunk: #181b20;
+  --color-ink: #ffffff;
+  --color-ink-2: rgb(255 255 255 / 0.74);
+  --color-muted: rgb(255 255 255 / 0.44);
+  --color-line: rgb(255 255 255 / 0.12);
+  --color-line-strong: rgb(255 255 255 / 0.28);
+  --color-accent: #16a85a;
+  --color-accent-soft: rgb(22 168 90 / 0.22);
+  --color-on-accent: #061008;
 
   --color-ok: #2ad184;
   --color-warn: #f5b745;
@@ -107,38 +103,38 @@
   --color-danger: #ff6e61;
 
   /* Backward compat with ecell tokens */
-  --color-void: #090a1a;
-  --color-ink-900: #12132e;
-  --color-ink-800: #1a1c3d;
-  --color-ink-700: #232652;
-  --color-fg: #f8f3e3;
-  --color-fg-muted: rgb(248 243 227 / 0.74);
-  --color-fg-dim: rgb(248 243 227 / 0.44);
-  --color-lime: #f3d489;
-  --color-lime-ink: #090a1a;
+  --color-void: #060708;
+  --color-ink-900: #101216;
+  --color-ink-800: #181b20;
+  --color-ink-700: #20242b;
+  --color-fg: #ffffff;
+  --color-fg-muted: rgb(255 255 255 / 0.74);
+  --color-fg-dim: rgb(255 255 255 / 0.44);
+  --color-lime: #16a85a;
+  --color-lime-ink: #061008;
 }
 
 @theme inline {
-  --font-display: "Fraunces", "Fronsis", serif;
-  --font-heading: "Fraunces", "Fronsis", serif;
-  --font-subheading: "Poppins", sans-serif;
-  --font-body: "Open Sauce Sans", sans-serif;
-  --font-mono: "IBM Plex Mono";
-  --font-sans: "Open Sauce Sans", sans-serif;
+  --font-display: "FK Grotesk", "Open Sauce Sans", sans-serif;
+  --font-heading: "FK Grotesk", "Open Sauce Sans", sans-serif;
+  --font-subheading: "Outfit", sans-serif;
+  --font-body: "FK Grotesk", "Open Sauce Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --font-sans: "FK Grotesk", "Open Sauce Sans", sans-serif;
 }
 
 :root {
-  --bg: #090a1a;
-  --surface: #12132e;
-  --sunk: #1a1c3d;
-  --ink: #f8f3e3;
-  --ink-2: rgb(248 243 227 / 0.74);
-  --muted: rgb(248 243 227 / 0.44);
-  --line: rgb(248 243 227 / 0.12);
-  --line-strong: rgb(248 243 227 / 0.28);
-  --accent: #f3d489;
-  --accent-soft: rgb(243 212 137 / 0.22);
-  --on-accent: #090a1a;
+  --bg: #060708;
+  --surface: #101216;
+  --sunk: #181b20;
+  --ink: #ffffff;
+  --ink-2: rgb(255 255 255 / 0.74);
+  --muted: rgb(255 255 255 / 0.44);
+  --line: rgb(255 255 255 / 0.12);
+  --line-strong: rgb(255 255 255 / 0.28);
+  --accent: #16a85a;
+  --accent-soft: rgb(22 168 90 / 0.22);
+  --on-accent: #061008;
   --ok: #2ad184;
   --warn: #f5b745;
   --info: #80aaff;
@@ -146,11 +142,11 @@
   --danger: #ff6e61;
 
   --sans:
-    "Open Sauce Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, sans-serif;
-  --display: "Fraunces", "Fronsis", serif;
-  --heading: "Fraunces", "Fronsis", serif;
-  --subheading: "Poppins", sans-serif;
+    "FK Grotesk", "Open Sauce Sans", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --display: "FK Grotesk", "Open Sauce Sans", sans-serif;
+  --heading: "FK Grotesk", "Open Sauce Sans", sans-serif;
+  --subheading: "Outfit", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 
   --measure: 680px;
@@ -217,7 +213,7 @@ svg {
   outline-offset: 3px;
 }
 
-/* Headings: Fronsis (Fraunces) */
+/* Headings: FK Grotesk */
 h1,
 h2,
 .heading,
@@ -229,7 +225,7 @@ h2,
   margin: 0;
 }
 
-/* Sub-headings: Poppins (semi-bold) */
+/* Sub-headings: Outfit (semi-bold) */
 h3,
 h4,
 h5,
@@ -324,12 +320,62 @@ h6,
   margin-left: 0.12em;
 }
 
+/* Terminal drawer: useTerminalDrawer.ts mirrors these durations */
+.terminal-drawer,
+.terminal-backdrop {
+  --dur-drawer: 280ms;
+}
+
+.terminal-drawer[data-tier="lite"],
+.terminal-backdrop[data-tier="lite"] {
+  --dur-drawer: 160ms;
+}
+
+.terminal-drawer[data-tier="off"],
+.terminal-backdrop[data-tier="off"] {
+  --dur-drawer: 0ms;
+}
+
+.terminal-drawer {
+  transform: translate3d(0, 0, 0);
+  transition: transform var(--dur-drawer) var(--ease);
+}
+
+.terminal-backdrop {
+  opacity: 1;
+  transition: opacity var(--dur-drawer) ease;
+}
+
+.terminal-drawer[data-leaving] {
+  transform: translate3d(-100%, 0, 0);
+}
+
+.terminal-backdrop[data-leaving] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.terminal-drawer[data-dragging],
+.terminal-backdrop[data-dragging] {
+  transition: none;
+}
+
+@starting-style {
+  .terminal-drawer {
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  .terminal-backdrop {
+    opacity: 0;
+  }
+}
+
 /* Header */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgb(9 10 26 / 0.88);
+  background: rgb(6 7 8 / 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
@@ -423,15 +469,15 @@ h6,
 
 .site-header.overlay:not(.is-solid) .wordmark,
 .site-header.overlay:not(.is-solid) nav a:not(.btn) {
-  text-shadow: 0 1px 12px rgb(9 10 26 / 0.65);
+  text-shadow: 0 1px 12px rgb(6 7 8 / 0.65);
 }
 
 .site-header.overlay:not(.is-solid) .wordmark .pre {
-  color: rgb(248 243 227 / 0.75);
+  color: rgb(255 255 255 / 0.75);
 }
 
 .site-header.overlay:not(.is-solid) nav a:not(.btn) {
-  color: rgb(248 243 227 / 0.9);
+  color: rgb(255 255 255 / 0.9);
 }
 
 /* Home hero image */
@@ -439,7 +485,7 @@ h6,
   position: relative;
   height: clamp(380px, 74vh, 780px);
   overflow: hidden;
-  background: rgb(24 28 66);
+  background: rgb(16 18 22);
 }
 
 .hero-media::after {
@@ -447,7 +493,7 @@ h6,
   position: absolute;
   inset: 0 0 auto;
   height: 160px;
-  background: linear-gradient(rgb(9 10 26 / 0.65), rgb(9 10 26 / 0));
+  background: linear-gradient(rgb(6 7 8 / 0.65), rgb(6 7 8 / 0));
   pointer-events: none;
 }
 
@@ -1055,6 +1101,77 @@ h6,
 }
 
 /* Footer */
+/* Footer: big statement over faint diagonal light, all in the one accent */
+.footer-beams {
+  background-image:
+    linear-gradient(
+      128deg,
+      transparent 38%,
+      rgb(22 168 90 / 0.07) 44%,
+      transparent 47%,
+      transparent 52%,
+      rgb(22 168 90 / 0.04) 56%,
+      transparent 62%
+    ),
+    linear-gradient(
+      52deg,
+      transparent 58%,
+      rgb(255 255 255 / 0.03) 66%,
+      transparent 74%
+    );
+}
+
+/* Plain CSS, not utilities: the global `a { color: inherit }` rule is unlayered,
+   so it beats Tailwind's text colour classes on links. */
+.footer-bar {
+  color: var(--on-accent);
+}
+
+.footer-links a,
+.footer-links li button {
+  transition: color 160ms var(--ease);
+}
+
+.footer-links a:hover,
+.footer-links li button:hover {
+  color: var(--ink);
+}
+
+.footer-statement,
+.footer-year {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.footer-statement {
+  font-size: clamp(3.25rem, 9.5vw, 10rem);
+}
+
+.footer-year {
+  font-size: clamp(5rem, 16vw, 17rem);
+  line-height: 0.85;
+}
+
+.footer-prompt {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 2.4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.footer-cta {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 2.2vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
 .site-footer {
   position: relative;
   overflow: hidden;
@@ -1283,7 +1400,7 @@ h6,
   color: var(--on-fill);
 }
 
-.btn.sm:not(.light):hover {
+.btn.sm:not(.light, .primary):hover {
   --fill: var(--accent);
   --on-fill: var(--on-accent);
   background: var(--accent);

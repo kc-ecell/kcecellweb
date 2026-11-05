@@ -51,8 +51,8 @@ Dark is the canonical theme for the public site.
   --color-fg-dim:   #626A80;  /* labels, meta  (3.6:1, never for body) */
 
   /* Signal: the E-Cell colour. Primary CTA, active states, XP. */
-  --color-lime:     #C8FF3D;
-  --color-lime-ink: #0B0F00;  /* text on lime */
+  --color-lime:     #16A85A;
+  --color-lime-ink: #061008;  /* text on lime */
 
   /* Accents: one per department, used as tags and card trims */
   --color-cyan:     #3DE8FF;  /* Technical */
@@ -89,16 +89,15 @@ Dark is the canonical theme for the public site.
 
 | Role | Family | Use |
 |---|---|---|
-| Display | **Unbounded** (variable, 400–900) | Headlines, big numbers, wordmark |
-| Body | **Geist** | Paragraphs, UI |
-| Mono | **Geist Mono** | Eyebrows, labels, meta, code, terminal, stats |
-| Pixel | **Silkscreen** | Game UI only: XP, badges, level labels, 404 game |
+| Primary | **FK Grotesk** (licensed, files pending) | Headlines, big numbers, wordmark, paragraphs, UI |
+| Sub | **Outfit** (variable, 100–900) | Sub-headings (`h3`–`h6`, `.subheading`) |
+| Mono | **IBM Plex Mono** | Eyebrows, labels, meta, code, terminal, stats |
 
-Loaded with `next/font` (Google / `geist` package), Latin subset, `display: swap`, CSS variables `--font-display`, `--font-body`, `--font-mono`, `--font-pixel`.
+Self-hosted from `public/fonts` with `@font-face` in `app/globals.css`, `font-display: swap`. Tokens: `--font-display`, `--font-heading`, `--font-body`, `--font-subheading`, `--font-mono`. Open Sauce Sans is the fallback in the FK Grotesk stacks until the licensed files are added.
 
 ### Scale (fluid, clamp)
 ```css
---text-mega:   clamp(3.5rem, 11vw, 11rem);   /* hero, footer wordmark */
+--text-mega:   clamp(3.5rem, 11vw, 11rem);   /* hero */
 --text-display:clamp(2.75rem, 7vw, 6.5rem);
 --text-h1:     clamp(2.25rem, 5vw, 4.25rem);
 --text-h2:     clamp(1.75rem, 3.4vw, 3rem);
@@ -109,7 +108,7 @@ Loaded with `next/font` (Google / `geist` package), Latin subset, `display: swap
 --text-label:  0.75rem;       /* mono, uppercase, tracking 0.08em */
 ```
 
-Headlines: Unbounded 700–800, tracking −0.02em, line-height 0.95.
+Headlines: FK Grotesk 600, tracking −0.015em, line-height 1.04.
 Measure: body text max `68ch`.
 
 ### Eyebrow pattern

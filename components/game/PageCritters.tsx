@@ -2,6 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { useMotionTier } from "@/components/motion/MotionProvider";
+import {
+  HALF,
+  createCritterWorld,
+  hop,
+  releaseVelocity,
+  steer,
+  type CritterBody,
+} from "@/lib/game/critterPhysics";
 import { useFounder } from "@/lib/game/FounderContext";
 import { soundEngine } from "@/lib/game/sound";
 
@@ -12,14 +21,9 @@ const BODY_H = 12;
 const DEPTH = 4;
 const LEG_H = 2;
 
-// Realistic physics in css px and seconds
-const GRAVITY = 1900;
-const MAX_LAUNCH = 3200;
-const BOUNCE = 0.35;
 const TAP_MS = 280;
 
 type Mood = "bars" | "dots" | "happy" | "sleepy" | "wide" | "dizzy";
-type State = "walk" | "idle" | "sleep" | "held" | "air";
 
 interface Palette {
   body: string;
@@ -62,27 +66,17 @@ const SAYINGS = [
   "hackathon time!",
 ];
 
-interface Critter {
+interface Critter extends CritterBody {
   id: number;
-  x: number;
-  y: number;
   homeY: number;
   bandTop: number;
   bandBottom: number;
-  vx: number;
-  vy: number;
   tx: number;
   ty: number;
   speed: number;
   theta: number;
   thetaTarget: number;
-  rot: number;
-  rotV: number;
-  lift: number;
-  liftV: number;
-  squash: number;
   step: number;
-  state: State;
   timer: number;
   mood: Mood;
   moodTimer: number;
@@ -112,6 +106,7 @@ export function PageCritters({ count = 10 }: { count?: number }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pathname = usePathname();
   const { terminalOpen, state, award } = useFounder();
+  const tier = useMotionTier();
   const awardRef = useRef(award);
 
   useEffect(() => {
@@ -179,6 +174,10 @@ export function PageCritters({ count = 10 }: { count?: number }) {
           lift: rand(120, 260),
           liftV: 0,
           squash: 0,
+          squashV: 0,
+          holdX: 0,
+          holdLift: 0,
+          mass: rand(0.85, 1.2),
           step: 0,
           state: "air",
           timer: rand(1, 2.5),
@@ -340,22 +339,17 @@ export function PageCritters({ count = 10 }: { count?: number }) {
         if (!isDragging && dist > 5) {
           isDragging = true;
           activeCritter.state = "held";
-          activeCritter.rot = 0;
-          activeCritter.rotV = 0;
           activeCritter.mood = "wide";
           activeCritter.moodTimer = 0.5;
           updatePointerEvents(true);
         }
 
         if (isDragging) {
-          activeCritter.x = clamp(pos.x + grabOffsetX, 25, w - 25);
+          activeCritter.holdX = clamp(pos.x + grabOffsetX, 25, w - 25);
           const rawTargetY = pos.y + grabOffsetY;
           const targetY = clamp(rawTargetY, 20, originalGroundY);
-          activeCritter.lift = Math.max(0, originalGroundY - targetY);
+          activeCritter.holdLift = Math.max(0, originalGroundY - targetY);
           activeCritter.y = originalGroundY;
-          activeCritter.vx = 0;
-          activeCritter.vy = 0;
-          activeCritter.liftV = 0;
 
           if (history.length >= 2) {
             const first = history[0]!;
@@ -437,45 +431,24 @@ export function PageCritters({ count = 10 }: { count?: number }) {
           c.timer = rand(2, 4);
           say(c, pick(["*yawn*", "awake!", "good morning!"]));
         } else {
-          c.state = "air";
-          c.liftV = 420;
+          hop(c, 420);
           c.mood = "happy";
           c.moodTimer = 1.8;
           say(c, pick(SAYINGS));
         }
       } else if (isDragging) {
-        // Fling / launch physics across page!
-        let vx = 0;
-        let vy = 0;
-        if (history.length >= 2) {
-          const first = history[0]!;
-          const lastSample = history[history.length - 1]!;
-          const dtSec = Math.max(0.015, (lastSample.t - first.t) / 1000);
-          vx = (lastSample.x - first.x) / dtSec;
-          vy = (lastSample.y - first.y) / dtSec;
-        }
+        // The pendulum's spin carries through; only the throw comes from the pointer
+        const throwV = releaseVelocity(history, now);
+        c.state = "air";
+        c.vx = throwV.vx;
+        c.vy = 0;
+        c.liftV = throwV.liftV;
 
-        const launchVx = clamp(vx * 1.35, -MAX_LAUNCH, MAX_LAUNCH);
-        const launchLiftV = clamp(-vy * 1.45, -MAX_LAUNCH, MAX_LAUNCH);
-
-        c.vx = launchVx;
-        c.liftV = launchLiftV;
-
-        if (c.lift > 2 || Math.abs(c.liftV) > 120 || Math.abs(c.vx) > 160) {
-          c.state = "air";
-          c.rotV = clamp(c.vx * 0.009, -15, 15);
-          c.mood =
-            Math.abs(c.liftV) > 1000 || Math.abs(c.vx) > 1200
-              ? "dizzy"
-              : "happy";
+        const fast = Math.hypot(throwV.vx, throwV.liftV);
+        if (fast > 300) {
+          c.mood = fast > 1200 ? "dizzy" : "happy";
           c.moodTimer = 2.0;
           say(c, pick(["wheee!", "launch!", "to the moon!", "buidl!"]));
-        } else {
-          c.state = "idle";
-          c.lift = 0;
-          c.liftV = 0;
-          c.vx = 0;
-          c.timer = rand(1.5, 3.5);
         }
       }
 
@@ -511,60 +484,20 @@ export function PageCritters({ count = 10 }: { count?: number }) {
       }
       if (c.blink > 0) c.blink -= dt;
 
-      if (c.squash > 0) c.squash = Math.max(0, c.squash - dt * 4.2);
-
       c.theta += (c.thetaTarget - c.theta) * Math.min(1, dt * 10);
 
-      // AIR PHYSICS
-      if (c.state === "air") {
-        c.liftV -= GRAVITY * dt;
-        c.lift += c.liftV * dt;
-        c.x += c.vx * dt;
-        c.rot += c.rotV * dt;
-        c.rotV *= Math.max(0, 1 - dt * 1.5);
-        c.vx *= Math.max(0, 1 - dt * 0.45);
+      // The physics world moves these
+      if (c.state === "air" || c.state === "held") return;
 
-        // Ceiling bounce
-        if (c.y - c.lift < 25) {
-          c.lift = c.y - 25;
-          c.liftV = -Math.abs(c.liftV) * 0.65;
-        }
-
-        // Wall bounce
-        if (c.x < 25) {
-          c.x = 25;
-          c.vx = Math.abs(c.vx) * 0.7;
-          c.rotV = -c.rotV * 0.65;
-        } else if (c.x > w - 25) {
-          c.x = w - 25;
-          c.vx = -Math.abs(c.vx) * 0.7;
-          c.rotV = -c.rotV * 0.65;
-        }
-
-        // Ground landing
-        if (c.lift <= 0) {
-          c.lift = 0;
-          if (c.liftV < -240) {
-            c.liftV = -c.liftV * BOUNCE;
-            c.squash = Math.min(1.2, Math.abs(c.liftV) / 750);
-            c.rotV *= 0.4;
-          } else {
-            c.liftV = 0;
-            c.rot = 0;
-            c.rotV = 0;
-            c.state = "idle";
-            c.timer = rand(1.2, 3);
-            c.entering = false;
-            newTarget(c);
-          }
-        }
+      // Knocked over: lie there a moment, then kick back up onto its feet
+      if (c.state === "down") {
+        if (c.timer <= 0) hop(c, 380);
         return;
       }
 
-      if (c.state === "held") return;
-
       // SLEEP
       if (c.state === "sleep") {
+        steer(c, 0, 0, dt);
         c.zTimer -= dt;
         if (c.zTimer <= 0) {
           zs.push({ x: c.x + 8, y: c.y - (BODY_H + LEG_H) * U - 6, age: 0 });
@@ -580,6 +513,7 @@ export function PageCritters({ count = 10 }: { count?: number }) {
 
       // IDLE
       if (c.state === "idle") {
+        steer(c, 0, 0, dt);
         if (c.timer <= 0) {
           if (c.naps >= 3 && Math.random() < 0.35) {
             c.state = "sleep";
@@ -607,16 +541,15 @@ export function PageCritters({ count = 10 }: { count?: number }) {
           c.timer = rand(1.5, 4);
           // Playful spontaneous hop
           if (Math.random() < 0.28) {
-            c.state = "air";
-            c.liftV = rand(240, 420);
-            c.vx = rand(-80, 80);
+            c.vx += rand(-80, 80);
+            hop(c, rand(240, 420));
           }
           return;
         }
 
-        const stepSpeed = c.speed * dt;
-        c.x += (dx / d) * stepSpeed;
-        c.y += (dy / d) * stepSpeed;
+        // Ease off on the approach instead of stopping dead at the target
+        const pace = c.speed * Math.min(1, d / 40);
+        steer(c, (dx / d) * pace, (dy / d) * pace, dt);
         c.step += dt * c.speed * 0.12;
         c.thetaTarget = (dx / d) * 0.25;
 
@@ -625,6 +558,36 @@ export function PageCritters({ count = 10 }: { count?: number }) {
         c.y = clamp(c.y, c.bandTop, c.bandBottom);
       }
     };
+
+    const world = createCritterWorld<Critter>({
+      collisions: tier === "full",
+      onSettle: (c, upright) => {
+        c.entering = false;
+        c.vy = 0;
+        if (upright) {
+          c.state = "idle";
+          c.timer = rand(1.2, 3);
+          newTarget(c);
+        } else {
+          c.state = "down";
+          c.timer = rand(0.7, 1.5);
+          c.mood = "dizzy";
+          c.moodTimer = c.timer + 0.4;
+        }
+      },
+      onImpact: (c, speed) => {
+        if (speed > 1400 && !c.entering) {
+          c.mood = "dizzy";
+          c.moodTimer = 1.8;
+          say(c, pick(["ow", "@_@", "again!"]), 1.4);
+        }
+      },
+      onKnock: (c, speed) => {
+        c.mood = speed > 600 ? "dizzy" : "wide";
+        c.moodTimer = 1.4;
+        say(c, pick(["hey!", "oof", "rude!", "watch it!"]), 1.2);
+      },
+    });
 
     // Collision separation between critters
     const separate = () => {
@@ -692,18 +655,23 @@ export function PageCritters({ count = 10 }: { count?: number }) {
       const top = -BODY_H - (sitting ? 0 : LEG_H);
 
       ctx.save();
-      ctx.translate(Math.round(c.x), Math.round(c.y - c.lift));
+      // Spin around the centre of mass; the sprite is drawn up from its feet.
+      ctx.translate(Math.round(c.x), Math.round(c.y - c.lift - HALF));
       if (c.rot) ctx.rotate(c.rot);
+      ctx.translate(0, HALF);
       const sq = c.squash * 0.2 + (sitting ? Math.sin(clockSec * 2) * 0.03 : 0);
       const st =
         c.state === "air" ? Math.min(0.28, Math.abs(c.liftV) / 7000) : 0;
-      ctx.scale(U * (1 + sq - st * 0.6), U * (1 - sq + st));
+      // Volume stays constant: whatever is lost in height goes to width.
+      const stretch = 1 - sq + st;
+      ctx.scale(U / stretch, U * stretch);
       const px = (x: number, y: number, ww = 1, hh = 1) =>
         ctx.fillRect(x, y, ww, hh);
 
       const moving = c.state === "walk";
       const phase = Math.floor(c.step) % 2;
-      const dangling = c.state === "held" || c.state === "air";
+      const dangling =
+        c.state === "held" || c.state === "air" || c.state === "down";
 
       // Legs
       ctx.fillStyle = outline;
@@ -761,14 +729,14 @@ export function PageCritters({ count = 10 }: { count?: number }) {
 
       const facingFront = cos > 0.2;
       if (fw >= 5) {
-        ctx.fillStyle = "#090a18";
+        ctx.fillStyle = "#060708";
         for (const d of [2, 4, 6])
           px(fx + Math.round((d / BODY_W) * fw), top + 1);
       }
 
       // Eyes
       if (facingFront && fw >= 4) {
-        ctx.fillStyle = "#090a18";
+        ctx.fillStyle = "#060708";
         const ey = top + 5;
         const narrow = fw < 9;
         const m = eyeMood(c);
@@ -825,7 +793,7 @@ export function PageCritters({ count = 10 }: { count?: number }) {
       const a = Math.min(1, c.sayTimer * 3);
 
       ctx.globalAlpha = a;
-      ctx.fillStyle = "#0c0d1e";
+      ctx.fillStyle = "#101216";
       ctx.strokeStyle = "#10b981";
       ctx.lineWidth = 1;
 
@@ -887,6 +855,7 @@ export function PageCritters({ count = 10 }: { count?: number }) {
 
       // Update all critters
       for (const c of critters) update(c, dt);
+      world.step(critters, dt, { left: 25, right: w - 25, top: HALF * 2 + 4 });
       separate();
 
       // Viewport culling: only render what is in view (plus small buffer)
@@ -938,9 +907,9 @@ export function PageCritters({ count = 10 }: { count?: number }) {
       canvas.removeEventListener("pointerup", onPointerUp);
       canvas.removeEventListener("pointercancel", onPointerUp);
     };
-  }, [count, pathname]);
+  }, [count, pathname, tier]);
 
-  if (!state.prefs.game) return null;
+  if (!state.prefs.game || tier === "off") return null;
 
   return (
     <canvas

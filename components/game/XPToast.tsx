@@ -16,7 +16,7 @@ export function XPToast() {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className="animate-in slide-in-from-bottom-2 fade-in pointer-events-auto flex items-center justify-between gap-3 rounded-lg border border-emerald-500/40 bg-[#0e1022]/95 px-3.5 py-2 text-neutral-100 shadow-2xl backdrop-blur-md duration-200"
+          className="animate-in slide-in-from-bottom-2 fade-in bg-surface/95 pointer-events-auto flex items-center justify-between gap-3 rounded-lg border border-emerald-500/40 px-3.5 py-2 text-neutral-100 shadow-2xl backdrop-blur-md duration-200"
         >
           <div className="flex items-center gap-2 font-mono text-xs">
             {toast.xp > 0 && (

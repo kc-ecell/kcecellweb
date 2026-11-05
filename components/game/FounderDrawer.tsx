@@ -50,11 +50,11 @@ export function FounderDrawer() {
       onClick={() => setDrawerOpen(false)}
     >
       <div
-        className="animate-in slide-in-from-right flex h-full w-full max-w-md flex-col overflow-hidden border-l border-white/10 bg-[#0d0e1f] text-neutral-100 shadow-2xl duration-300"
+        className="animate-in slide-in-from-right bg-surface flex h-full w-full max-w-md flex-col overflow-hidden border-l border-white/10 text-neutral-100 shadow-2xl duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 bg-[#090a16] px-6 py-5">
+        <div className="bg-bg flex items-center justify-between border-b border-white/10 px-6 py-5">
           <div className="flex items-center gap-2.5">
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-400" />
             <h2 className="font-mono text-sm font-bold tracking-widest text-white uppercase">
@@ -77,7 +77,7 @@ export function FounderDrawer() {
           className="flex-1 space-y-6 overflow-y-auto overscroll-contain p-6 font-mono"
         >
           {/* Level Progress Card */}
-          <div className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#12142d] to-[#0b0c1c] p-5">
+          <div className="from-surface to-bg relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br p-5">
             <div className="mb-3 flex items-center justify-between">
               <div>
                 <span className="block text-[11px] tracking-wider text-neutral-400 uppercase">
@@ -153,7 +153,7 @@ export function FounderDrawer() {
                     key={b.id}
                     className={`flex flex-col gap-1 rounded-lg border p-3 transition-all ${
                       isUnlocked
-                        ? "border-emerald-500/40 bg-[#141738] shadow-sm"
+                        ? "bg-sunk border-emerald-500/40 shadow-sm"
                         : "border-white/5 bg-white/[0.02] opacity-60"
                     }`}
                   >
