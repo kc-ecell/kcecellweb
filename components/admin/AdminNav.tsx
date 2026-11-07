@@ -24,11 +24,11 @@ const STAFF_ITEMS: Item[] = [
 ];
 
 const MANAGEMENT_ITEMS: Item[] = [
-  { label: "messages", roles: ["owner", "admin"] },
+  { label: "messages", href: "/admin/messages", roles: ["owner", "admin"] },
   { label: "stats", href: "/admin/stats", roles: ["owner", "admin"] },
-  { label: "settings", roles: ["owner", "admin"] },
-  { label: "staff", roles: ["owner"] },
-  { label: "audit log", roles: ["owner", "admin"] },
+  { label: "settings", href: "/admin/settings", roles: ["owner", "admin"] },
+  { label: "staff", href: "/admin/staff", roles: ["owner"] },
+  { label: "audit log", href: "/admin/audit", roles: ["owner", "admin"] },
 ];
 
 export function AdminNav({ role }: { role: Role }) {
