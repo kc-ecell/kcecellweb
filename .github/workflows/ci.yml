@@ -23,6 +23,11 @@ jobs:
         run: npm run format:check
       - name: Build (+ check:devtools)
         run: npm run build
+        # Placeholders only: public reads fail and fall back to empty states.
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
 
   # Added in later phases (see docs/DEPLOYMENT.md §4):
   #   - Phase 2: `supabase start && supabase test db` (RLS pgTAP)
