@@ -24,7 +24,7 @@ cross join (values
   ('faculty',   'faculty',    'Prof. Yogesh Karunakar','Faculty Coordinator',    $f$Approves everything. Reads every proposal. Still replies at 11pm.$f$, 0),
   ('leadership','leadership', 'Raaj Patkar',           'President',              $f$Runs the show, calls the meetings nobody asked for, and somehow still finds time to sleep. Probably.$f$, 1),
   ('leadership','leadership', 'Daivik Pawar',          'Vice President',         $f$The president when the president is busy. Knows where every document is, including the one you lost.$f$, 2),
-  ('leadership','leadership', 'Subhra Parijha',        'Secretary',              $f$Writes the minutes no one reads and keeps the calendar honest.$f$, 3),
+  ('leadership','leadership', 'Subhra Parija',        'Secretary',              $f$Writes the minutes no one reads and keeps the calendar honest.$f$, 3),
   ('leadership','leadership', 'Krishna Mundhara',      'Treasurer',              $f$Counting money that doesn't exist yet and chasing invoices that do.$f$, 4),
   ('technical', 'head',       'Aryan Wesavkar',        'Cybersecurity Head',     $f$Breaks things on purpose so the rest of us don't have to.$f$, 5),
   ('technical', 'cohead',     'Amey Thanekar',         'Cybersecurity Co-Head',  $f$Backup paranoia. Runs the CTFs. Knows your password was in a dump.$f$, 6),

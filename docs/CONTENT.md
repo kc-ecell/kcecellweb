@@ -122,7 +122,7 @@ The Events team should add the rest of the 100+ events through the admin panel, 
 |---|---|---|---|
 | Raaj Patkar | President | ✓ | Runs the show, calls the meetings nobody asked for, and somehow still finds time to sleep. Probably. |
 | Daivik Pawar | Vice President | ✓ | The president when the president is busy. Knows where every document is, including the one you lost. |
-| Subhra Parijha | Secretary | ✓ | Writes the minutes no one reads and keeps the calendar honest. |
+| Subhra Parija | Secretary | ✓ | Writes the minutes no one reads and keeps the calendar honest. |
 | Krishna Mundhara | Treasurer | | Counting money that doesn't exist yet and chasing invoices that do. |
 
 ### Technical
