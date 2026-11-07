@@ -182,7 +182,7 @@
   --sunk: #181b20;
   --ink: #ffffff;
   --ink-2: rgb(255 255 255 / 0.74);
-  --muted: rgb(255 255 255 / 0.44);
+  --muted: rgb(255 255 255 / 0.46);
   --line: rgb(255 255 255 / 0.12);
   --line-strong: rgb(255 255 255 / 0.28);
   --accent: #16a85a;
@@ -206,6 +206,14 @@
   --wide: 1200px;
   --gutter: clamp(20px, 5vw, 96px);
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-reveal: 520ms;
+  --dur-page: 280ms;
+  --tap: 44px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 
   --z-nav: 50;
   --z-overlay: 80;
@@ -312,7 +320,8 @@ h6,
 .wrap {
   max-width: calc(var(--wide) + 2 * var(--gutter));
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 max(var(--gutter), var(--safe-right)) 0
+    max(var(--gutter), var(--safe-left));
   width: 100%;
 }
 
@@ -433,6 +442,7 @@ h6,
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
+  padding-top: var(--safe-top);
   transform: translateZ(0);
   transition:
     background-color 300ms ease,
@@ -460,8 +470,10 @@ h6,
   transition: color 160ms ease;
 }
 
-.site-header nav a:not(.btn):hover {
-  color: var(--ink);
+@media (hover: hover) and (pointer: fine) {
+  .site-header nav a:not(.btn):hover {
+    color: var(--ink);
+  }
 }
 
 .site-header nav a:not(.btn)[aria-current="page"] {
@@ -501,7 +513,8 @@ h6,
   z-index: calc(var(--z-nav) - 1);
   display: flex;
   flex-direction: column;
-  padding: calc(76px + 24px) var(--gutter) 24px;
+  padding: calc(76px + 24px + var(--safe-top)) var(--gutter)
+    calc(24px + var(--safe-bottom));
   background: var(--bg);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -537,7 +550,7 @@ h6,
 /* Home hero image */
 .hero-media {
   position: relative;
-  height: clamp(380px, 74vh, 780px);
+  height: clamp(380px, 74svh, 780px);
   overflow: hidden;
   background: rgb(16 18 22);
 }
@@ -582,7 +595,7 @@ html[data-boot-skip] .hero-media img {
 
 @media (max-width: 640px) {
   .hero-media {
-    height: 56vh;
+    height: 48svh;
   }
   .hero-media img {
     object-position: 50% 70%;
@@ -720,9 +733,11 @@ html[data-boot-skip] .hero-media img {
   font: inherit;
 }
 
-.filters a:hover,
-.filters button:hover {
-  color: var(--ink-2);
+@media (hover: hover) and (pointer: fine) {
+  .filters a:hover,
+  .filters button:hover {
+    color: var(--ink-2);
+  }
 }
 
 .filters a[aria-current="true"],
@@ -812,13 +827,14 @@ html[data-boot-skip] .hero-media img {
     color 200ms ease;
 }
 
-.card-row:hover h3 {
-  color: var(--accent);
-}
-
-.card-row:hover .arrow {
-  transform: translateX(8px);
-  color: var(--accent);
+@media (hover: hover) and (pointer: fine) {
+  .card-row:hover h3 {
+    color: var(--accent);
+  }
+  .card-row:hover .arrow {
+    transform: translateX(8px);
+    color: var(--accent);
+  }
 }
 
 @media (max-width: 640px) {
@@ -947,9 +963,11 @@ html[data-boot-skip] .hero-media img {
     background-color 200ms ease;
 }
 
-.timeline-card:hover {
-  box-shadow: var(--shadow-card-hover);
-  background: var(--sunk);
+@media (hover: hover) and (pointer: fine) {
+  .timeline-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    background: var(--sunk);
+  }
 }
 
 .timeline-year {
@@ -1020,9 +1038,11 @@ html[data-boot-skip] .hero-media img {
     transform 200ms ease;
 }
 
-.team-card:hover {
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .team-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
 }
 
 .team-photo-wrap {
@@ -1035,8 +1055,10 @@ html[data-boot-skip] .hero-media img {
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.team-card:hover .team-photo-wrap {
-  transform: scale(1.04);
+@media (hover: hover) and (pointer: fine) {
+  .team-card:hover .team-photo-wrap {
+    transform: scale(1.04);
+  }
 }
 
 .team-photo-wrap img {
@@ -1063,8 +1085,10 @@ html[data-boot-skip] .hero-media img {
   pointer-events: none;
 }
 
-.team-card:hover .team-photo-wrap img.team-photo-bw {
-  opacity: 0;
+@media (hover: hover) and (pointer: fine) {
+  .team-card:hover .team-photo-wrap img.team-photo-bw {
+    opacity: 0;
+  }
 }
 
 .team-info {
@@ -1106,10 +1130,16 @@ html[data-boot-skip] .hero-media img {
     color 300ms ease;
 }
 
-.cta-band:hover,
 .cta-band:focus-visible {
   background: var(--ink);
   color: var(--bg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cta-band:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
 }
 
 .cta-band .wrap {
@@ -1138,20 +1168,30 @@ html[data-boot-skip] .hero-media img {
   transform: translateY(160%);
 }
 
-.cta-band:hover .roll > span:first-child,
 .cta-band:focus-visible .roll > span:first-child {
   transform: translateY(-160%);
 }
 
-.cta-band:hover .roll > span + span,
+@media (hover: hover) and (pointer: fine) {
+  .cta-band:hover .roll > span:first-child {
+    transform: translateY(-160%);
+  }
+}
+
 .cta-band:focus-visible .roll > span + span {
   transform: translateY(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cta-band:hover .roll > span + span {
+    transform: translateY(0);
+  }
 }
 
 .cta-band .sub {
   display: block;
   font-size: 0.9375rem;
-  opacity: 0.7;
+  opacity: 0.85;
   margin-top: 8px;
 }
 
@@ -1162,8 +1202,10 @@ html[data-boot-skip] .hero-media img {
   transition: transform 300ms var(--ease);
 }
 
-.cta-band:hover .arrow {
-  transform: translateX(10px);
+@media (hover: hover) and (pointer: fine) {
+  .cta-band:hover .arrow {
+    transform: translateX(10px);
+  }
 }
 
 @media (max-width: 640px) {
@@ -1193,9 +1235,11 @@ html[data-boot-skip] .hero-media img {
   transition: color 160ms var(--ease);
 }
 
-.footer-links a:hover,
-.footer-links li button:hover {
-  color: var(--ink);
+@media (hover: hover) and (pointer: fine) {
+  .footer-links a:hover,
+  .footer-links li button:hover {
+    color: var(--ink);
+  }
 }
 
 /* Same cut as .display, only larger */
@@ -1214,7 +1258,7 @@ html[data-boot-skip] .hero-media img {
 }
 
 /* Hover devices only, so a tap can't leave it stuck white */
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .footer-statement:hover {
     color: var(--ink);
   }
@@ -1261,8 +1305,10 @@ html[data-boot-skip] .hero-media img {
   transition: color 150ms ease;
 }
 
-.footer-big:hover {
-  color: var(--accent);
+@media (hover: hover) and (pointer: fine) {
+  .footer-big:hover {
+    color: var(--accent);
+  }
 }
 
 .footer-big strong {
@@ -1278,8 +1324,10 @@ html[data-boot-skip] .hero-media img {
   transition: transform 300ms ease;
 }
 
-.footer-big:hover .arrow {
-  transform: translate(4px, -4px);
+@media (hover: hover) and (pointer: fine) {
+  .footer-big:hover .arrow {
+    transform: translate(4px, -4px);
+  }
 }
 
 .footer-cols {
@@ -1310,8 +1358,10 @@ html[data-boot-skip] .hero-media img {
   transition: color 160ms ease;
 }
 
-.footer-cols a:hover {
-  color: var(--accent);
+@media (hover: hover) and (pointer: fine) {
+  .footer-cols a:hover {
+    color: var(--accent);
+  }
 }
 
 .footer-base {
@@ -1335,8 +1385,10 @@ html[data-boot-skip] .hero-media img {
   color: var(--muted);
 }
 
-.made-by:hover {
-  color: var(--ink);
+@media (hover: hover) and (pointer: fine) {
+  .made-by:hover {
+    color: var(--ink);
+  }
 }
 
 .made-by img {
@@ -1455,27 +1507,26 @@ html[data-boot-skip] .hero-media img {
   pointer-events: none;
 }
 
-.btn-fx:hover {
-  border-color: var(--fill);
-}
-
-.btn:not(.btn-fx):hover {
-  border-color: var(--ink);
-}
-
-.btn.sm:hover,
-.btn.light:not(.btn-fx):hover {
-  background: var(--fill);
-  border-color: var(--fill);
-  color: var(--on-fill);
-}
-
-.btn.sm:not(.light, .primary):hover {
-  --fill: var(--accent);
-  --on-fill: var(--on-accent);
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
+@media (hover: hover) and (pointer: fine) {
+  .btn-fx:hover {
+    border-color: var(--fill);
+  }
+  .btn:not(.btn-fx):hover {
+    border-color: var(--ink);
+  }
+  .btn.sm:hover,
+  .btn.light:not(.btn-fx):hover {
+    background: var(--fill);
+    border-color: var(--fill);
+    color: var(--on-fill);
+  }
+  .btn.sm:not(.light, .primary):hover {
+    --fill: var(--accent);
+    --on-fill: var(--on-accent);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
 }
 
 /* Arrows */
@@ -1489,12 +1540,13 @@ html[data-boot-skip] .hero-media img {
   display: inline-block;
 }
 
-.btn-fx:hover .arrow > span {
-  animation: arrow-loop 500ms var(--ease) both;
-}
-
-.btn-fx:hover .arrow.down > span {
-  animation-name: arrow-drop;
+@media (hover: hover) and (pointer: fine) {
+  .btn-fx:hover .arrow > span {
+    animation: arrow-loop 500ms var(--ease) both;
+  }
+  .btn-fx:hover .arrow.down > span {
+    animation-name: arrow-drop;
+  }
 }
 
 @keyframes arrow-loop {
@@ -1834,4 +1886,172 @@ html[data-boot-done] .boot {
   html[data-boot] .boot {
     display: none;
   }
+}
+
+/* Client-side navigation only: see components/motion/PageTransition.tsx */
+.page-enter {
+  animation: page-enter var(--dur-page) var(--ease-reveal) backwards;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Touch baseline. In a layer so Tailwind's touch-none and select-text still win. */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a,
+  button,
+  summary,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
+  button,
+  [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* iOS opens a link preview on long-press, which would swallow the logo's
+   hold-to-open-terminal gesture */
+.wordmark,
+.wordmark img {
+  -webkit-touch-callout: none;
+}
+
+/* Press feedback: touch has no hover, so this is the only response to a tap.
+   .btn already has its own :active scale. */
+@media (hover: none) {
+  .cta-band:active,
+  .footer-bar:active {
+    transform: scale(0.98);
+  }
+
+  .card-row a:active,
+  .filters a:active,
+  .filters button:active,
+  .footer-links a:active,
+  .footer-links button:active,
+  .tap-row:active {
+    opacity: 0.6;
+  }
+
+  /* The colour layer only ever shows on hover. Hidden lazy images aren't fetched,
+     so touch devices download one photo per person instead of two. */
+  .team-photo-wrap img.team-photo-color:has(+ img.team-photo-bw) {
+    display: none;
+  }
+}
+
+/* Touch-sized targets, by input type rather than width: tablets need them too */
+@media (pointer: coarse) {
+  /* iOS zooms the page when focus lands on anything smaller than 16px */
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+
+  .filters {
+    gap: 0 20px;
+  }
+
+  .filters a,
+  .filters button,
+  .tap-row,
+  .footer-links li a,
+  .footer-links li button {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+
+  .footer-links {
+    font-size: 0.875rem;
+  }
+
+  .footer-links ul {
+    row-gap: 0;
+  }
+
+  .footer-links .footer-terminal,
+  .game-dismiss {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--tap);
+    min-height: var(--tap);
+  }
+}
+
+/* Fixed UI clears the home indicator and the landscape notch */
+.site-footer {
+  padding-left: max(1rem, var(--safe-left));
+  padding-right: max(1rem, var(--safe-right));
+}
+
+.game-hud {
+  left: calc(1.25rem + var(--safe-left));
+  bottom: calc(1.25rem + var(--safe-bottom));
+}
+
+.game-toasts {
+  left: calc(1.25rem + var(--safe-left));
+  bottom: calc(4rem + var(--safe-bottom));
+}
+
+.terminal-drawer {
+  padding-top: var(--safe-top);
+  padding-left: var(--safe-left);
+}
+
+.terminal-input-bar {
+  padding-bottom: calc(0.75rem + var(--safe-bottom));
+}
+
+/* The open mobile menu owns the screen */
+html[data-menu-open] .game-chrome {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  /* Bring the first button up towards the fold */
+  .hero-media + .hero {
+    padding-top: 32px;
+  }
+
+  .hero {
+    gap: 20px;
+  }
+
+  /* Game UI must not cover content (docs/GAMIFICATION.md): one toast at a time */
+  .game-toasts > :not(:last-child) {
+    display: none;
+  }
+
+  .game-toasts {
+    right: calc(1.25rem + var(--safe-right));
+  }
+
+  .terminal-hint {
+    bottom: calc(4.5rem + var(--safe-bottom));
+  }
+}
+
+/* Plain CSS: the global h2 rule is unlayered, so it beats text utilities */
+.contact-label {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  line-height: 1.43;
+  text-transform: uppercase;
 }

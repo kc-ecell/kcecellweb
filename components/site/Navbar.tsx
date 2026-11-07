@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -26,8 +26,16 @@ export function Navbar() {
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const longPressFiredRef = useRef(false);
 
-  const handleLogoClick = () => {
+  const handleLogoClick = (e: MouseEvent) => {
+    // The finger lifting after a long-press must not also follow the link
+    if (longPressFiredRef.current) {
+      longPressFiredRef.current = false;
+      e.preventDefault();
+      return;
+    }
+
     clickCountRef.current += 1;
     if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
 
@@ -42,7 +50,9 @@ export function Navbar() {
   };
 
   const handleTouchStart = () => {
+    longPressFiredRef.current = false;
     longPressTimerRef.current = setTimeout(() => {
+      longPressFiredRef.current = true;
       window.dispatchEvent(new KeyboardEvent("keydown", { key: "`" }));
     }, 1500);
   };
@@ -50,6 +60,7 @@ export function Navbar() {
   const handleTouchEnd = () => {
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
     }
   };
 
@@ -77,12 +88,14 @@ export function Navbar() {
     const root = document.documentElement;
     const prev = root.style.overflow;
     root.style.overflow = "hidden";
+    root.dataset.menuOpen = "";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       root.style.overflow = prev;
+      delete root.dataset.menuOpen;
       window.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
@@ -109,6 +122,12 @@ export function Navbar() {
             onClick={handleLogoClick}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+            onContextMenu={(e) => {
+              // Android opens the link menu on hold, which ends the touch early
+              if (longPressTimerRef.current) e.preventDefault();
+            }}
             className="wordmark flex shrink-0 items-center transition-opacity select-none hover:opacity-85"
             aria-label="KC E-Cell"
           >
@@ -117,6 +136,7 @@ export function Navbar() {
               alt="KC E-Cell Logo"
               width={64}
               height={54}
+              draggable={false}
               className="h-10 w-auto object-contain sm:h-12"
               priority
             />

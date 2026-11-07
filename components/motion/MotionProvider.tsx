@@ -62,19 +62,19 @@ function detectTier(): MotionTier {
     typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency < 4;
   const saveData = nav.connection?.saveData === true;
 
-  let noWebGl2 = false;
-  try {
-    const canvas = document.createElement("canvas");
-    noWebGl2 = !canvas.getContext("webgl2");
-  } catch {
-    noWebGl2 = true;
-  }
-
   const smallCoarse =
     window.matchMedia("(pointer: coarse)").matches && window.innerWidth < 768;
 
-  if (lowMemory || lowCores || saveData || noWebGl2 || smallCoarse)
+  if (lowMemory || lowCores || saveData || smallCoarse) return "lite";
+
+  // Last on purpose: creating a context blocks the main thread for ~180ms on a
+  // throttled phone, so it only runs when nothing cheaper has decided the tier.
+  try {
+    const canvas = document.createElement("canvas");
+    if (!canvas.getContext("webgl2")) return "lite";
+  } catch {
     return "lite";
+  }
   return "full";
 }
 

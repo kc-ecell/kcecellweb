@@ -2,11 +2,11 @@
 
 // Smooth scroll on the `full` tier only, driven by the GSAP ticker so Lenis
 // and ScrollTrigger share one rAF loop. See docs/ANIMATIONS.md §0 / ARCH §6.
+// Both load on demand, so phones and the lite tier never download them.
 import { useEffect, useRef, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import Lenis from "lenis";
+import type Lenis from "lenis";
 import { useMotionTier } from "@/components/motion/MotionProvider";
-import { gsap, ScrollTrigger } from "@/lib/motion/gsap";
 
 export function LenisProvider({ children }: { children: ReactNode }) {
   const tier = useMotionTier();
@@ -22,28 +22,42 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       !window.matchMedia("(hover: hover)").matches;
     if (isTouchOnly) return;
 
-    const lenis = new Lenis({
-      lerp: 0.1,
-      smoothWheel: true,
-      syncTouch: false,
-      autoRaf: false,
-    });
-    lenisRef.current = lenis;
+    let cancelled = false;
+    let teardown: (() => void) | undefined;
 
-    lenis.on("scroll", ScrollTrigger.update);
+    void Promise.all([import("lenis"), import("@/lib/motion/gsap")]).then(
+      ([{ default: LenisClass }, { gsap, ScrollTrigger }]) => {
+        if (cancelled) return;
 
-    const onTick = (time: number) => {
-      lenis.raf(time * 1000);
-    };
+        const lenis = new LenisClass({
+          lerp: 0.1,
+          smoothWheel: true,
+          syncTouch: false,
+          autoRaf: false,
+        });
+        lenisRef.current = lenis;
 
-    gsap.ticker.add(onTick);
-    // Turn off lag smoothing so frame timing remains consistent for Lenis
-    gsap.ticker.lagSmoothing(0);
+        lenis.on("scroll", ScrollTrigger.update);
+
+        const onTick = (time: number) => {
+          lenis.raf(time * 1000);
+        };
+
+        gsap.ticker.add(onTick);
+        // Turn off lag smoothing so frame timing remains consistent for Lenis
+        gsap.ticker.lagSmoothing(0);
+
+        teardown = () => {
+          gsap.ticker.remove(onTick);
+          lenis.destroy();
+          lenisRef.current = null;
+        };
+      },
+    );
 
     return () => {
-      gsap.ticker.remove(onTick);
-      lenis.destroy();
-      lenisRef.current = null;
+      cancelled = true;
+      teardown?.();
     };
   }, [tier]);
 

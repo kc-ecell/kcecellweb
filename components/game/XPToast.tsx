@@ -11,7 +11,7 @@ export function XPToast() {
     <div
       aria-live="polite"
       aria-atomic="true"
-      className="pointer-events-none fixed bottom-16 left-5 z-[56] flex max-w-sm flex-col-reverse gap-2"
+      className="game-chrome game-toasts pointer-events-none fixed z-[56] flex max-w-sm flex-col-reverse gap-2"
     >
       {toasts.map((toast) => (
         <div
@@ -38,7 +38,7 @@ export function XPToast() {
           <button
             type="button"
             onClick={() => dismissToast(toast.id)}
-            className="cursor-pointer px-1 font-mono text-xs text-neutral-500 hover:text-neutral-300"
+            className="game-dismiss cursor-pointer px-1 font-mono text-xs text-neutral-500 hover:text-neutral-300"
             aria-label="Dismiss notification"
           >
             ✕

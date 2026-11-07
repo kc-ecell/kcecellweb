@@ -19,6 +19,16 @@ export default async function Home() {
       {/* 1. Hero Media: Pixel art illustration from Commons Gigs */}
       <div className="hero-media">
         <picture>
+          <source
+            media="(max-width: 640px)"
+            type="image/avif"
+            srcSet="/brand/hero-960.avif"
+          />
+          <source
+            media="(max-width: 640px)"
+            type="image/webp"
+            srcSet="/brand/hero-960.webp"
+          />
           <source type="image/avif" srcSet="/brand/hero-1672.avif" />
           <source type="image/webp" srcSet="/brand/hero-1672.webp" />
           <img

@@ -133,12 +133,10 @@ export default function ContactPage() {
         {/* Info Sidebar */}
         <div className="flex flex-col gap-8">
           <div className="bg-surface shadow-card p-6">
-            <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
-              direct email
-            </h3>
+            <h2 className="contact-label text-muted mb-2">direct email</h2>
             <a
               href="mailto:kcecell@kccemsr.edu.in"
-              className="text-ink hover:text-accent text-lg transition-colors"
+              className="tap-row text-ink hover:text-accent text-lg transition-colors"
             >
               kcecell@kccemsr.edu.in ↗
             </a>
@@ -148,9 +146,7 @@ export default function ContactPage() {
           </div>
 
           <div className="bg-surface shadow-card p-6">
-            <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
-              campus location
-            </h3>
+            <h2 className="contact-label text-muted mb-2">campus location</h2>
             <p className="text-ink text-base">
               K.C. College of Engineering & Management Studies
             </p>
@@ -160,15 +156,13 @@ export default function ContactPage() {
           </div>
 
           <div className="bg-surface shadow-card p-6">
-            <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
-              social links
-            </h3>
+            <h2 className="contact-label text-muted mb-2">social links</h2>
             <div className="mt-2 flex flex-col gap-2">
               <a
                 href="https://www.instagram.com/kcecell_?utm_source=ig_web_button_share_sheet&obrf=ZDNlZDc0MzIxNw=="
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ink-2 hover:text-accent text-sm"
+                className="tap-row text-ink-2 hover:text-accent text-sm"
               >
                 Instagram ↗
               </a>
@@ -176,7 +170,7 @@ export default function ContactPage() {
                 href="https://www.linkedin.com/company/kcecell"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ink-2 hover:text-accent text-sm"
+                className="tap-row text-ink-2 hover:text-accent text-sm"
               >
                 LinkedIn ↗
               </a>
@@ -184,7 +178,7 @@ export default function ContactPage() {
                 href="https://github.com/kc-ecell"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ink-2 hover:text-accent text-sm"
+                className="tap-row text-ink-2 hover:text-accent text-sm"
               >
                 GitHub ↗
               </a>
