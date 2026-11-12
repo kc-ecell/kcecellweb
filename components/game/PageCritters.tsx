@@ -128,6 +128,9 @@ export function PageCritters({ count = 10 }: { count?: number }) {
     let last = performance.now();
     let isTabVisible = !document.hidden;
     let viewportMode = false;
+    // Phones have no margins, so anywhere but the hero art a critter stands on
+    // text or a control. They live on the hero there, and nowhere else.
+    let heroEl: HTMLElement | null = null;
 
     const critters: Critter[] = [];
 
@@ -201,16 +204,16 @@ export function PageCritters({ count = 10 }: { count?: number }) {
       viewportMode = window.innerWidth < 768;
       // Pixel art needs no retina canvas; 1x keeps phones smooth
       const dpr = viewportMode ? 1 : Math.min(window.devicePixelRatio || 1, 2);
-      // On narrow screens pages get very tall, so critters spread across the whole
-      // page are almost never on screen (and a page-tall canvas can exceed mobile
-      // canvas limits). There, pin the canvas to the viewport instead.
-      canvas.style.position = viewportMode ? "fixed" : "";
-      const newW = viewportMode
-        ? window.innerWidth
-        : parent.clientWidth || window.innerWidth;
+      heroEl = viewportMode ? document.querySelector(".hero-media") : null;
+      if (viewportMode && !heroEl) {
+        canvas.style.display = "none";
+        return;
+      }
+      canvas.style.display = "";
+      const newW = parent.clientWidth || window.innerWidth;
       // offsetHeight, not scrollHeight: the canvas counts towards scrollHeight, so
       // it could never shrink and left blank space after the footer on short pages.
-      const newH = viewportMode ? window.innerHeight : parent.offsetHeight;
+      const newH = heroEl ? heroEl.offsetHeight : parent.offsetHeight;
 
       if (newW === 0 || newH === 0) return;
 
@@ -838,7 +841,10 @@ export function PageCritters({ count = 10 }: { count?: number }) {
     };
 
     const frame = () => {
-      if (!isTabVisible) {
+      // Nothing to draw: tab hidden, a phone page with no hero, or scrolled past it
+      const offStage =
+        viewportMode && (!heroEl || heroEl.getBoundingClientRect().bottom < 0);
+      if (!isTabVisible || offStage) {
         raf = requestAnimationFrame(frame);
         return;
       }

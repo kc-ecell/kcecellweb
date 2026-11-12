@@ -31,7 +31,7 @@ export function Footer() {
   );
 
   return (
-    <footer className="bg-bg text-accent relative isolate flex min-h-svh w-full flex-col overflow-hidden px-4 pt-24 pb-20 md:px-6">
+    <footer className="site-footer bg-bg text-accent relative isolate flex min-h-svh w-full flex-col overflow-hidden px-4 pt-24 pb-20 md:px-6">
       <div className="bg-accent h-1 w-full" />
 
       <div className="mt-5 flex flex-col gap-8 md:mt-7 md:flex-row md:items-start md:justify-between">
@@ -43,7 +43,8 @@ export function Footer() {
           </h2>
         </Reveal>
         <Reveal delay={0.08} className="self-end md:self-center">
-          <p className="footer-year" aria-label="Copyright 2026">
+          <p className="footer-year">
+            <span className="sr-only">Copyright 2026</span>
             <span aria-hidden="true">©26</span>
           </p>
         </Reveal>
@@ -78,7 +79,7 @@ export function Footer() {
             <button
               type="button"
               onClick={() => setTerminalOpen(!terminalOpen)}
-              className="text-accent hover:text-ink cursor-pointer p-1 font-mono font-bold motion-safe:animate-pulse"
+              className="footer-terminal text-accent hover:text-ink cursor-pointer p-1 font-mono font-bold motion-safe:animate-pulse"
               title="Launch ecell.sh terminal (~ or Ctrl+K)"
               aria-label="Launch ecell.sh terminal"
             >

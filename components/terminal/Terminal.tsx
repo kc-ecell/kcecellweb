@@ -738,11 +738,12 @@ export function Terminal() {
       type="button"
       {...tabProps}
       aria-label="Open terminal"
-      className={`bg-bg fixed top-1/2 left-0 z-[55] flex h-20 w-7 -translate-y-1/2 cursor-grab touch-none items-center justify-center rounded-r-md border border-l-0 border-emerald-500/50 font-mono text-xs font-bold text-emerald-400 shadow-xl select-none active:cursor-grabbing ${
+      className={`game-chrome bg-bg fixed top-1/2 left-0 z-[55] flex h-20 w-4 -translate-y-1/2 cursor-grab touch-none items-center justify-center rounded-r-md border border-l-0 border-emerald-500/50 font-mono text-xs font-bold text-emerald-400 shadow-xl select-none before:absolute before:inset-y-0 before:left-0 before:w-7 active:cursor-grabbing md:w-7 ${
         pulling ? "opacity-0" : ""
       }`}
     >
-      &gt;_
+      <span className="md:hidden">&gt;</span>
+      <span className="hidden md:inline">&gt;_</span>
     </button>
   );
 
@@ -867,7 +868,7 @@ export function Terminal() {
         {/* Command Input Row */}
         <form
           onSubmit={handleSubmit}
-          className="bg-bg relative z-30 flex items-center gap-2 border-t border-white/10 px-4 py-3"
+          className="terminal-input-bar bg-bg relative z-30 flex items-center gap-2 border-t border-white/10 px-4 py-3"
         >
           <span className="shrink-0 font-bold text-emerald-400 select-none">
             {loginStep === "awaiting_email"
@@ -891,6 +892,10 @@ export function Terminal() {
             }
             className="flex-1 bg-transparent font-mono text-xs text-white outline-none placeholder:text-neutral-600 sm:text-sm"
             autoComplete="off"
+            autoCapitalize="none"
+            autoCorrect="off"
+            enterKeyHint="go"
+            inputMode={loginStep === "awaiting_email" ? "email" : "text"}
             spellCheck={false}
             aria-label="Terminal input"
           />

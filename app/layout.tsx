@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { BOOT_GATE_SCRIPT } from "@/lib/motion/boot-gate";
@@ -25,6 +25,16 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
+};
+
+// themeColor mirrors --bg in globals.css. viewportFit lets the page run under
+// the notch, and the safe-area insets in globals.css pad content back out.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
+  themeColor: "#060708",
 };
 
 export default async function RootLayout({

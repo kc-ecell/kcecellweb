@@ -29,12 +29,10 @@ export default async function ContactPage() {
         {/* Info Sidebar */}
         <div className="flex flex-col gap-8">
           <div className="bg-surface shadow-card p-6">
-            <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
-              direct email
-            </h3>
+            <h2 className="contact-label text-muted mb-2">direct email</h2>
             <a
               href={`mailto:${settings.email}`}
-              className="text-ink hover:text-accent text-lg transition-colors"
+              className="tap-row text-ink hover:text-accent text-lg transition-colors"
             >
               {settings.email} ↗
             </a>
@@ -44,9 +42,7 @@ export default async function ContactPage() {
           </div>
 
           <div className="bg-surface shadow-card p-6">
-            <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
-              campus location
-            </h3>
+            <h2 className="contact-label text-muted mb-2">campus location</h2>
             <p className="text-ink text-base">
               K.C. College of Engineering & Management Studies
             </p>
@@ -54,15 +50,13 @@ export default async function ContactPage() {
           </div>
 
           <div className="bg-surface shadow-card p-6">
-            <h3 className="text-muted mb-2 font-mono text-sm font-medium tracking-wider uppercase">
-              social links
-            </h3>
+            <h2 className="contact-label text-muted mb-2">social links</h2>
             <div className="mt-2 flex flex-col gap-2">
               <a
                 href={settings.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ink-2 hover:text-accent text-sm"
+                className="tap-row text-ink-2 hover:text-accent text-sm"
               >
                 Instagram ↗
               </a>
@@ -70,7 +64,7 @@ export default async function ContactPage() {
                 href={settings.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ink-2 hover:text-accent text-sm"
+                className="tap-row text-ink-2 hover:text-accent text-sm"
               >
                 LinkedIn ↗
               </a>
@@ -78,7 +72,7 @@ export default async function ContactPage() {
                 href={settings.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ink-2 hover:text-accent text-sm"
+                className="tap-row text-ink-2 hover:text-accent text-sm"
               >
                 GitHub ↗
               </a>

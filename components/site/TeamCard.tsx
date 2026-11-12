@@ -1,6 +1,9 @@
 import Image from "next/image";
 import type { PublicMember } from "@/lib/data/public";
 
+// Matches .team-grid: 2 across on phones, 3 up to 1024px, fixed cards above.
+const PHOTO_SIZES = "(max-width: 559px) 50vw, (max-width: 1023px) 33vw, 340px";
+
 export function TeamCard({ member }: { member: PublicMember }) {
   return (
     <div className="team-card">
@@ -12,6 +15,7 @@ export function TeamCard({ member }: { member: PublicMember }) {
               alt={member.name}
               width={340}
               height={340}
+              sizes={PHOTO_SIZES}
               className="team-photo-color"
             />
             {member.photoBw && (
@@ -21,6 +25,7 @@ export function TeamCard({ member }: { member: PublicMember }) {
                 aria-hidden="true"
                 width={340}
                 height={340}
+                sizes={PHOTO_SIZES}
                 className="team-photo-bw"
               />
             )}

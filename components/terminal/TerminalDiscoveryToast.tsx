@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useFounder } from "@/lib/game/FounderContext";
 
 const HINT_DISMISSED_KEY = "ecell:terminal:hint-dismissed";
+// Phones have no spare margin, so the hint can't sit over the page indefinitely
+const PHONE_HINT_MS = 8000;
 
 export function TerminalDiscoveryToast() {
   const { terminalOpen, setTerminalOpen, isHydrated } = useFounder();
@@ -28,6 +30,12 @@ export function TerminalDiscoveryToast() {
     return () => clearTimeout(timer);
   }, [isHydrated]);
 
+  useEffect(() => {
+    if (!visible || !window.matchMedia("(max-width: 767.98px)").matches) return;
+    const timer = setTimeout(() => setVisible(false), PHONE_HINT_MS);
+    return () => clearTimeout(timer);
+  }, [visible]);
+
   const handleDismiss = () => {
     setVisible(false);
     try {
@@ -47,7 +55,7 @@ export function TerminalDiscoveryToast() {
   return (
     <aside
       aria-label="Secret terminal discovery prompt"
-      className="animate-in slide-in-from-top-4 fade-in pointer-events-auto fixed right-5 bottom-20 z-[54] w-[calc(100vw-2.5rem)] max-w-sm duration-300 sm:max-w-md md:top-24 md:bottom-auto"
+      className="game-chrome terminal-hint animate-in slide-in-from-top-4 fade-in pointer-events-auto fixed right-5 bottom-20 z-[54] w-[calc(100vw-2.5rem)] max-w-sm duration-300 sm:max-w-md md:top-24 md:bottom-auto"
     >
       <div className="bg-bg/95 relative overflow-hidden rounded-xl border border-emerald-500/40 p-4 font-mono text-neutral-200 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-md">
         {/* Subtle accent border line */}
@@ -67,22 +75,22 @@ export function TerminalDiscoveryToast() {
           <button
             type="button"
             onClick={handleDismiss}
-            className="cursor-pointer px-1 text-xs text-neutral-500 transition-colors hover:text-white"
+            className="game-dismiss cursor-pointer px-1 text-xs text-neutral-500 transition-colors hover:text-white"
             aria-label="Close notification"
           >
             ✕
           </button>
         </div>
 
-        <p className="mb-3 text-xs leading-relaxed text-neutral-300">
+        <p className="mb-3 hidden text-xs leading-relaxed text-neutral-300 md:block">
           This site has a built-in console (
           <span className="font-semibold text-emerald-400">ecell.sh</span>)
           loaded with hidden commands, easter eggs, matrix rain, and founder
           perks.
         </p>
 
-        <div className="flex items-center justify-between gap-2 border-t border-white/10 pt-1">
-          <span className="text-[11px] text-neutral-400">
+        <div className="flex items-center justify-end gap-2 pt-1 md:justify-between md:border-t md:border-white/10">
+          <span className="hidden text-[11px] text-neutral-400 md:inline">
             Press{" "}
             <kbd className="rounded bg-white/10 px-1.5 py-0.5 font-bold text-white">
               ~
@@ -96,7 +104,7 @@ export function TerminalDiscoveryToast() {
           <button
             type="button"
             onClick={handleLaunch}
-            className="cursor-pointer rounded-md bg-emerald-500 px-3 py-1.5 text-xs font-bold tracking-wider text-black uppercase shadow-sm transition-colors hover:bg-emerald-400 active:scale-95"
+            className="min-h-11 cursor-pointer rounded-md bg-emerald-500 px-3 py-1.5 text-xs font-bold tracking-wider text-black uppercase shadow-sm transition-colors hover:bg-emerald-400 active:scale-95 md:min-h-0"
           >
             Launch Terminal &gt;_
           </button>

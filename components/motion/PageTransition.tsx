@@ -3,8 +3,15 @@
 // Per-navigation enter animation. Used via app/(site)/template.tsx, which
 // re-mounts on every route change. Phase 1 base is a fade + small rise; the
 // lime-scanline View Transition is a Phase 4 upgrade (docs/ANIMATIONS.md §11).
-import { motion } from "motion/react";
+//
+// The first page never animates. It arrives as HTML, and starting it hidden
+// would keep it blank until hydration, which on a phone is seconds after the
+// HTML landed. Only client-side navigations get the fade.
+import { useEffect, useState } from "react";
 import { useMotionTier } from "@/components/motion/MotionProvider";
+import { cn } from "@/lib/utils";
+
+let isFirstPage = true;
 
 export function PageTransition({
   className,
@@ -14,17 +21,15 @@ export function PageTransition({
   children: React.ReactNode;
 }) {
   const tier = useMotionTier();
+  const [enter] = useState(() => !isFirstPage);
 
-  if (tier === "off") return <div className={className}>{children}</div>;
+  useEffect(() => {
+    isFirstPage = false;
+  }, []);
 
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <div className={cn(className, enter && tier !== "off" && "page-enter")}>
       {children}
-    </motion.div>
+    </div>
   );
 }

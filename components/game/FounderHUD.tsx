@@ -37,12 +37,12 @@ export function FounderHUD() {
   return (
     <aside
       aria-label="Founder XP status"
-      className="pointer-events-auto fixed bottom-5 left-5 z-[55]"
+      className="game-chrome game-hud pointer-events-auto fixed z-[55]"
     >
       <button
         type="button"
         onClick={() => setDrawerOpen(!drawerOpen)}
-        className={`group flex cursor-pointer items-center gap-3 rounded-full border px-3.5 py-2 font-mono text-xs tracking-wide shadow-xl backdrop-blur-md transition-all duration-300 select-none active:scale-95 ${
+        className={`group flex min-h-11 cursor-pointer items-center gap-3 rounded-full border px-3.5 py-2 font-mono text-xs tracking-wide shadow-xl backdrop-blur-md transition-all duration-300 select-none active:scale-95 md:min-h-0 ${
           isUnicorn
             ? "border-emerald-400/50 bg-gradient-to-r from-emerald-950/80 via-teal-900/80 to-purple-950/80 text-emerald-300 shadow-emerald-500/20"
             : "bg-bg/90 hover:bg-surface border-white/15 text-neutral-200 hover:border-emerald-500/50"
@@ -68,13 +68,13 @@ export function FounderHUD() {
           <span className="font-bold text-white uppercase">
             LVL {level.level}
           </span>
-          <span className="text-neutral-500">·</span>
+          <span className="hidden text-neutral-500 md:inline">·</span>
           <span
-            className={
+            className={`hidden md:inline ${
               isUnicorn
                 ? "font-bold text-purple-300"
                 : "font-semibold text-emerald-400"
-            }
+            }`}
           >
             {level.name.toUpperCase()}
           </span>
@@ -82,7 +82,7 @@ export function FounderHUD() {
 
         {/* Pixel progress blocks */}
         <span
-          className="text-[11px] tracking-tighter text-emerald-500/80 transition-colors group-hover:text-emerald-400"
+          className="hidden text-[11px] tracking-tighter text-emerald-500/80 transition-colors group-hover:text-emerald-400 md:inline"
           aria-hidden="true"
         >
           {blocks}
