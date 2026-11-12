@@ -271,3 +271,35 @@ export async function getPost(slug: string): Promise<PublicPost | null> {
     .maybeSingle();
   return data ? toPost(data) : null;
 }
+
+export interface ContactSettings {
+  email: string;
+  address: string;
+  reply_time: string;
+  instagram: string;
+  linkedin: string;
+  github: string;
+}
+
+export async function getContactSettings(): Promise<ContactSettings> {
+  "use cache";
+  cacheTag("settings");
+  const { data, error } = await createStaticSupabase()
+    .from("site_settings")
+    .select("key, value")
+    .in("key", ["org.contact", "org.socials"]);
+  if (error) cacheLife("minutes");
+  else cacheLife("max");
+  const value = (key: string) =>
+    data?.find((row) => row.key === key)?.value ?? {};
+  const contact = value("org.contact");
+  const socials = value("org.socials");
+  return {
+    email: contact.email ?? "",
+    address: contact.address ?? "",
+    reply_time: contact.reply_time ?? "",
+    instagram: socials.instagram ?? "",
+    linkedin: socials.linkedin ?? "",
+    github: socials.github ?? "",
+  };
+}

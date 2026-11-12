@@ -453,7 +453,7 @@ export function Terminal() {
         } else {
           addLog("Core Leadership (2026–27):", "accent");
           addLog("· Raaj Patkar · President");
-          addLog("· Soham Varhadi · Secretary");
+          addLog("· Subhra Parija · Secretary");
           addLog("· Dr. Arundhati · Faculty Coordinator");
           addLog("View full trading cards at /team", "system");
         }
